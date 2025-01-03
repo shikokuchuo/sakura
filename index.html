@@ -152,20 +152,28 @@
 <span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; torch_tensor</span></span>
-<span><span class="co">#&gt;  0.4266</span></span>
-<span><span class="co">#&gt;  0.6847</span></span>
-<span><span class="co">#&gt;  0.7541</span></span>
-<span><span class="co">#&gt;  0.1171</span></span>
-<span><span class="co">#&gt;  0.7189</span></span>
+<span><span class="co">#&gt;  0.7018</span></span>
+<span><span class="co">#&gt;  0.4835</span></span>
+<span><span class="co">#&gt;  0.8654</span></span>
+<span><span class="co">#&gt;  0.2325</span></span>
+<span><span class="co">#&gt;  0.1030</span></span>
 <span><span class="co">#&gt; [ CPUFloatType{5} ]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.95554162 0.01231948 0.49277130 0.79085378 0.40704817</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.453503897 0.862080483 0.565105654 0.009682012 0.224152206</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h3>
-<p>We would like to thank in particular <a href="https://www.r-project.org/contributors.html" class="external-link">R Core</a> for providing the interface to the R serialization mechanism, and <a href="https://github.com/ltierney/" class="external-link">Luke Tierney</a> and <a href="https://github.com/coolbutuseless" class="external-link">Mike Cheng</a> for their meticulous efforts in documentating it.</p>
+<p>We would like to thank in particular:</p>
+<ul>
+<li>
+<a href="https://www.r-project.org/contributors.html" class="external-link">R Core</a> for providing the interface to the R serialization mechanism.</li>
+<li>
+<a href="https://github.com/ltierney/" class="external-link">Luke Tierney</a> and <a href="https://github.com/coolbutuseless" class="external-link">Mike Cheng</a> for their meticulous efforts in documenting the serialization interface.</li>
+<li>
+<a href="https://github.com/dfalbel" class="external-link">Daniel Falbel</a> for discussion around an efficient solution to serialization and transmission of torch tensors.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
