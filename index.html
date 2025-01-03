@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">sakura</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,12 @@
 <h3 id="extension-to-r-serialization">Extension to R Serialization<a class="anchor" aria-label="anchor" href="#extension-to-r-serialization"></a>
 </h3>
 <p>An extension of R native serialization using the ‘refhook’ system for custom serialization and unserialization of non-system reference objects.</p>
+<p>This package was a request from a meeting of the <a href="https://r-consortium.org/" class="external-link">R Consortium</a> <a href="https://github.com/RConsortium/marshalling-wg/" class="external-link">Marshalling and Serialization Working Group</a> held at useR!2024 in Salzburg, Austria. It is designed to further discussion around a common framework for marshalling in R.</p>
+<p>It extracts the functionality embedded within the <a href="https://github.com/shikokuchuo/nanonext" class="external-link">nanonext</a> and <a href="https://github.com/shikokuchuo/mirai" class="external-link">mirai</a> async frameworks for use in other contexts.</p>
+</div>
+<div class="section level3">
+<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h3>
 <p>Some R objects by their nature cannot be serialized, such as those accessed via an external pointer.</p>
 <p>Using the <a href="https://arrow.apache.org/docs/r/" class="external-link"><code>arrow</code></a> package as an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -146,15 +152,20 @@
 <span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; torch_tensor</span></span>
-<span><span class="co">#&gt;  0.1275</span></span>
-<span><span class="co">#&gt;  0.2434</span></span>
-<span><span class="co">#&gt;  0.4176</span></span>
-<span><span class="co">#&gt;  0.4934</span></span>
-<span><span class="co">#&gt;  0.0567</span></span>
+<span><span class="co">#&gt;  0.4266</span></span>
+<span><span class="co">#&gt;  0.6847</span></span>
+<span><span class="co">#&gt;  0.7541</span></span>
+<span><span class="co">#&gt;  0.1171</span></span>
+<span><span class="co">#&gt;  0.7189</span></span>
 <span><span class="co">#&gt; [ CPUFloatType{5} ]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.99648417 0.03548333 0.05227065 0.28857983 0.04848588</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.95554162 0.01231948 0.49277130 0.79085378 0.40704817</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h3>
+<p>We would like to thank in particular <a href="https://www.r-project.org/contributors.html" class="external-link">R Core</a> for providing the interface to the R serialization mechanism, and <a href="https://github.com/ltierney/" class="external-link">Luke Tierney</a> and <a href="https://github.com/coolbutuseless" class="external-link">Mike Cheng</a> for their meticulous efforts in documentating it.</p>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
