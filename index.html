@@ -78,7 +78,7 @@
 </h3>
 <p>An extension of R native serialization using the ‘refhook’ system for custom serialization and unserialization of non-system reference objects.</p>
 <p>This package was a request from a meeting of the <a href="https://r-consortium.org/" class="external-link">R Consortium</a> <a href="https://github.com/RConsortium/marshalling-wg/" class="external-link">Marshalling and Serialization Working Group</a> held at useR!2024 in Salzburg, Austria. It is designed to further discussion around a common framework for marshalling in R.</p>
-<p>It extracts the functionality embedded within the <a href="https://github.com/shikokuchuo/nanonext" class="external-link">nanonext</a> and <a href="https://github.com/shikokuchuo/mirai" class="external-link">mirai</a> async frameworks for use in other contexts.</p>
+<p>It extracts the functionality embedded within the <a href="https://github.com/shikokuchuo/mirai" class="external-link">mirai</a> async framework for use in other contexts.</p>
 </div>
 <div class="section level3">
 <h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
@@ -87,22 +87,22 @@
 <p>Using the <a href="https://arrow.apache.org/docs/r/" class="external-link"><code>arrow</code></a> package as an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/apache/arrow/" class="external-link">arrow</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">obj</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; Table</span></span>
 <span><span class="co">#&gt; Error: Invalid &lt;Table&gt;, external pointer to null</span></span></code></pre></div>
 <p>In such cases, <code><a href="reference/serial_config.html">sakura::serial_config()</a></code> can be used to create custom serialization configurations, specifying functions that hook into R’s native serialization mechanism for reference objects (‘refhooks’).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serial_config.html">serial_config</a></span><span class="op">(</span></span>
-<span>  class <span class="op">=</span> <span class="st">"ArrowTabular"</span>,</span>
-<span>  sfunc <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="va"><a href="https://arrow.apache.org/docs/r/reference/write_to_raw.html" class="external-link">write_to_raw</a></span>,</span>
-<span>  ufunc <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/read_ipc_stream.html" class="external-link">read_ipc_stream</a></span><span class="op">(</span><span class="va">x</span>, as_data_frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="st">"ArrowTabular"</span>,</span>
+<span>  <span class="fu">arrow</span><span class="fu">::</span><span class="va"><a href="https://arrow.apache.org/docs/r/reference/write_to_raw.html" class="external-link">write_to_raw</a></span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/read_ipc_stream.html" class="external-link">read_ipc_stream</a></span><span class="op">(</span><span class="va">x</span>, as_data_frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>This configuration can then be supplied as the ‘hook’ argument for <code><a href="reference/serialize.html">sakura::serialize()</a></code> and <code><a href="reference/serialize.html">sakura::unserialize()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">obj</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; Table</span></span>
 <span><span class="co">#&gt; 150 rows x 5 columns</span></span>
@@ -142,25 +142,20 @@
 <span><span class="co">#&gt; Error in (function (self) : external pointer is not valid</span></span></code></pre></div>
 <p>Base R serialization above fails, but <code>sakura</code> serialization succeeds:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serial_config.html">serial_config</a></span><span class="op">(</span></span>
-<span>  class <span class="op">=</span> <span class="st">"torch_tensor"</span>,</span>
-<span>  sfunc <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_serialize</span>,</span>
-<span>  ufunc <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_load</span>,</span>
-<span>  vec <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serial_config.html">serial_config</a></span><span class="op">(</span><span class="st">"torch_tensor"</span>, <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_serialize</span>, <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_load</span>, vec <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; torch_tensor</span></span>
-<span><span class="co">#&gt;  0.7018</span></span>
-<span><span class="co">#&gt;  0.4835</span></span>
-<span><span class="co">#&gt;  0.8654</span></span>
-<span><span class="co">#&gt;  0.2325</span></span>
-<span><span class="co">#&gt;  0.1030</span></span>
+<span><span class="co">#&gt;  0.6735</span></span>
+<span><span class="co">#&gt;  0.1192</span></span>
+<span><span class="co">#&gt;  0.2930</span></span>
+<span><span class="co">#&gt;  0.7962</span></span>
+<span><span class="co">#&gt;  0.7536</span></span>
 <span><span class="co">#&gt; [ CPUFloatType{5} ]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.453503897 0.862080483 0.565105654 0.009682012 0.224152206</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9682436 0.7885529 0.2699025 0.3752203 0.7983627</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
