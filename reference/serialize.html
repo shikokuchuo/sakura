@@ -85,6 +85,42 @@ serialization and unserialization of non-system reference objects.</p>
 <span class="r-in"><span><span class="fu">unserialize</span><span class="op">(</span><span class="va">vec</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 0 rows</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/as_arrow_table.html" class="external-link">as_arrow_table</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu"><a href="serial_config.html">serial_config</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"ArrowTabular"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">arrow</span><span class="fu">::</span><span class="va"><a href="https://arrow.apache.org/docs/r/reference/write_to_raw.html" class="external-link">write_to_raw</a></span>,</span></span>
+<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/read_ipc_stream.html" class="external-link">read_ipc_stream</a></span><span class="op">(</span><span class="va">x</span>, as_data_frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu">serialize</span><span class="op">(</span><span class="va">obj</span>, <span class="va">cfg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">unserialize</span><span class="op">(</span><span class="va">raw</span>, <span class="va">cfg</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150 rows x 5 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Length &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Sepal.Width &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Petal.Length &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Petal.Width &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Species &lt;dictionary&lt;values=string, indices=int8&gt;&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See $metadata for additional Schema metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32 rows x 11 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mpg &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cyl &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $disp &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $hp &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $drat &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $wt &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $qsec &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $vs &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $am &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $gear &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $carb &lt;double&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See $metadata for additional Schema metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
