@@ -41,7 +41,10 @@ typedef struct nano_buf_s {
 #define SAKURA_SERIAL_THR 134217728
 #define SAKURA_LD_STRLEN 21
 
-SEXP sakura_serialize(SEXP, SEXP);
-SEXP sakura_unserialize(SEXP, SEXP);
+void sakura_serialize(nano_buf *, SEXP, SEXP);
+SEXP sakura_unserialize(unsigned char *, size_t, SEXP);
+
+SEXP sakura_r_serialize(SEXP, SEXP);
+SEXP sakura_r_unserialize(SEXP, SEXP);
 
 #endif

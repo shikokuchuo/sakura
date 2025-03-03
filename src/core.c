@@ -96,30 +96,29 @@ static SEXP nano_outHook(SEXP x, SEXP fun) {
 
 }
 
-// API functions ---------------------------------------------------------------
+// C API functions -------------------------------------------------------------
 
-SEXP sakura_serialize(SEXP object, SEXP hook) {
+void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
 
-  nano_buf buf;
-  buf.buf = R_Calloc(SAKURA_INIT_BUFSIZE, unsigned char);
-  buf.len = SAKURA_INIT_BUFSIZE;
-  buf.cur = 0;
+  buf->buf = R_Calloc(SAKURA_INIT_BUFSIZE, unsigned char);
+  buf->len = SAKURA_INIT_BUFSIZE;
+  buf->cur = 0;
 
   const int reg = hook != R_NilValue;
   int vec;
 
   if (reg) {
     vec = reg ? INTEGER(CADDDR(hook))[0] : 0;
-    buf.buf[0] = 0x7;
-    buf.buf[1] = (uint8_t) vec;
-    buf.cur += 12;
+    buf->buf[0] = 0x7;
+    buf->buf[1] = (uint8_t) vec;
+    buf->cur += 12;
   }
 
   struct R_outpstream_st output_stream;
 
   R_InitOutPStream(
     &output_stream,
-    (R_pstream_data_t) &buf,
+    (R_pstream_data_t) buf,
 #ifdef WORDS_BIGENDIAN
     R_pstream_xdr_format,
 #else
@@ -135,8 +134,8 @@ SEXP sakura_serialize(SEXP object, SEXP hook) {
   R_Serialize(object, &output_stream);
 
   if (reg && TAG(hook) != R_NilValue) {
-    const uint64_t cursor = (uint64_t) buf.cur;
-    memcpy(buf.buf + 4, &cursor, sizeof(uint64_t));
+    const uint64_t cursor = (uint64_t) buf->cur;
+    memcpy(buf->buf + 4, &cursor, sizeof(uint64_t));
     SEXP call;
 
     if (vec) {
@@ -145,12 +144,12 @@ SEXP sakura_serialize(SEXP object, SEXP hook) {
       if (R_ToplevelExec(nano_eval_safe, call) &&
           TYPEOF(nano_eval_res) == RAWSXP) {
         R_xlen_t xlen = XLENGTH(nano_eval_res);
-        if (buf.cur + xlen > buf.len) {
-          buf.len = buf.cur + xlen;
-          buf.buf = R_Realloc(buf.buf, buf.len, unsigned char);
+        if (buf->cur + xlen > buf->len) {
+          buf->len = buf->cur + xlen;
+          buf->buf = R_Realloc(buf->buf, buf->len, unsigned char);
         }
-        memcpy(buf.buf + buf.cur, DATAPTR_RO(nano_eval_res), xlen);
-        buf.cur += xlen;
+        memcpy(buf->buf + buf->cur, DATAPTR_RO(nano_eval_res), xlen);
+        buf->cur += xlen;
       }
       UNPROTECT(1);
 
@@ -159,26 +158,26 @@ SEXP sakura_serialize(SEXP object, SEXP hook) {
       SEXP refList = TAG(hook);
       SEXP func = CADR(hook);
       R_xlen_t llen = Rf_xlength(refList);
-      if (buf.cur + sizeof(R_xlen_t) > buf.len) {
-        buf.len = buf.cur + SAKURA_INIT_BUFSIZE;
-        buf.buf = R_Realloc(buf.buf, buf.len, unsigned char);
+      if (buf->cur + sizeof(R_xlen_t) > buf->len) {
+        buf->len = buf->cur + SAKURA_INIT_BUFSIZE;
+        buf->buf = R_Realloc(buf->buf, buf->len, unsigned char);
       }
-      memcpy(buf.buf + buf.cur, &llen, sizeof(R_xlen_t));
-      buf.cur += sizeof(R_xlen_t);
+      memcpy(buf->buf + buf->cur, &llen, sizeof(R_xlen_t));
+      buf->cur += sizeof(R_xlen_t);
 
       for (R_xlen_t i = 0; i < llen; i++) {
         PROTECT(call = Rf_lcons(func, Rf_cons(VECTOR_ELT(refList, i), R_NilValue)));
         if (R_ToplevelExec(nano_eval_safe, call) &&
             TYPEOF(nano_eval_res) == RAWSXP) {
           R_xlen_t xlen = XLENGTH(nano_eval_res);
-          if (buf.cur + xlen + sizeof(R_xlen_t) > buf.len) {
-            buf.len = buf.cur + xlen + sizeof(R_xlen_t);
-            buf.buf = R_Realloc(buf.buf, buf.len, unsigned char);
+          if (buf->cur + xlen + sizeof(R_xlen_t) > buf->len) {
+            buf->len = buf->cur + xlen + sizeof(R_xlen_t);
+            buf->buf = R_Realloc(buf->buf, buf->len, unsigned char);
           }
-          memcpy(buf.buf + buf.cur, &xlen, sizeof(R_xlen_t));
-          buf.cur += sizeof(R_xlen_t);
-          memcpy(buf.buf + buf.cur, DATAPTR_RO(nano_eval_res), xlen);
-          buf.cur += xlen;
+          memcpy(buf->buf + buf->cur, &xlen, sizeof(R_xlen_t));
+          buf->cur += sizeof(R_xlen_t);
+          memcpy(buf->buf + buf->cur, DATAPTR_RO(nano_eval_res), xlen);
+          buf->cur += xlen;
         }
         UNPROTECT(1);
       }
@@ -189,18 +188,10 @@ SEXP sakura_serialize(SEXP object, SEXP hook) {
 
   }
 
-  SEXP out = Rf_allocVector(RAWSXP, buf.cur);
-  memcpy(RAW(out), buf.buf, buf.cur);
-  R_Free(buf.buf);
-
-  return out;
-
 }
 
-SEXP sakura_unserialize(SEXP object, SEXP hook) {
+SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
 
-  unsigned char *buf = RAW(object);
-  size_t sz = XLENGTH(object);
   uint64_t offset;
   size_t cur;
   SEXP reflist;
@@ -278,5 +269,26 @@ SEXP sakura_unserialize(SEXP object, SEXP hook) {
     SET_TAG(hook, R_NilValue);
 
   return out;
+
+}
+
+// R API functions -------------------------------------------------------------
+
+SEXP sakura_r_serialize(SEXP object, SEXP hook) {
+
+  nano_buf buf;
+  sakura_serialize(&buf, object, hook);
+
+  SEXP out = Rf_allocVector(RAWSXP, buf.cur);
+  memcpy(RAW(out), buf.buf, buf.cur);
+  R_Free(buf.buf);
+
+  return out;
+
+}
+
+SEXP sakura_r_unserialize(SEXP object, SEXP hook) {
+
+  return sakura_unserialize(RAW(object), XLENGTH(object), hook);
 
 }
