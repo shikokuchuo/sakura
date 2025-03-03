@@ -19,8 +19,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Extension to R Serialization">
-<meta name="description" content="Exposes the refhook functionality of R serialization for alternative serialization of non-system reference objects.">
-<meta property="og:description" content="Exposes the refhook functionality of R serialization for alternative serialization of non-system reference objects.">
+<meta name="description" content="Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows optimal, one-pass integrated serialization that combines R serialization with third-party serialization methods. Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, for use in parallel and distributed computing.">
+<meta property="og:description" content="Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows optimal, one-pass integrated serialization that combines R serialization with third-party serialization methods. Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, for use in parallel and distributed computing.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">sakura</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,8 +76,9 @@
 <div class="section level3">
 <h3 id="extension-to-r-serialization">Extension to R Serialization<a class="anchor" aria-label="anchor" href="#extension-to-r-serialization"></a>
 </h3>
-<p>An extension of R native serialization using the ‘refhook’ system for custom serialization and unserialization of non-system reference objects.</p>
-<p>This package was a request from a meeting of the <a href="https://r-consortium.org/" class="external-link">R Consortium</a> <a href="https://github.com/RConsortium/marshalling-wg/" class="external-link">Marshalling and Serialization Working Group</a> held at useR!2024 in Salzburg, Austria. It is designed to further discussion around a common framework for marshalling in R.</p>
+<p>Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows optimal, one-pass integrated serialization that combines R serialization with third-party serialization methods.</p>
+<p>Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, for use in parallel and distributed computing.</p>
+<p>This package was a request from a meeting of the <a href="https://r-consortium.org/" class="external-link">R Consortium</a> <a href="https://github.com/RConsortium/marshalling-wg/" class="external-link">Marshalling and Serialization Working Group</a> held at useR!2024 in Salzburg, Austria. It is designed to eventually provide a common framework for marshalling in R.</p>
 <p>It extracts the functionality embedded within the <a href="https://github.com/shikokuchuo/mirai" class="external-link">mirai</a> async framework for use in other contexts.</p>
 </div>
 <div class="section level3">
@@ -147,15 +148,15 @@
 <span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; torch_tensor</span></span>
-<span><span class="co">#&gt;  0.6735</span></span>
-<span><span class="co">#&gt;  0.1192</span></span>
-<span><span class="co">#&gt;  0.2930</span></span>
-<span><span class="co">#&gt;  0.7962</span></span>
-<span><span class="co">#&gt;  0.7536</span></span>
+<span><span class="co">#&gt;  0.6972</span></span>
+<span><span class="co">#&gt;  0.0887</span></span>
+<span><span class="co">#&gt;  0.0576</span></span>
+<span><span class="co">#&gt;  0.9132</span></span>
+<span><span class="co">#&gt;  0.4515</span></span>
 <span><span class="co">#&gt; [ CPUFloatType{5} ]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.9682436 0.7885529 0.2699025 0.3752203 0.7983627</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.79129934 0.31196571 0.70189057 0.53588851 0.00580887</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
@@ -183,6 +184,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=sakura" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/shikokuchuo/sakura/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/shikokuchuo/sakura/issues" class="external-link">Report a bug</a></li>
 </ul>
