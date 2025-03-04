@@ -1,6 +1,7 @@
 # sakura (development version)
 
 * Implements a C level interface with public declarations in `sakura.h`.
+* Package is re-licensed under the MIT licence.
 
 # sakura 0.1.0
 

@@ -17,7 +17,7 @@ Authors@R:
              comment = c(ORCID = "0000-0002-0750-061X")),
       person(given = "Hibiki AI Limited",
              role = "cph"))
-License: GPL (>= 3)
+License: MIT + file LICENSE
 BugReports: https://github.com/shikokuchuo/sakura/issues
 URL: https://shikokuchuo.net/sakura/, https://github.com/shikokuchuo/sakura/
 Encoding: UTF-8
