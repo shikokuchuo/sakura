@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/sakura)](https://CRAN.R-project.org/package=sakura)
 [![R-CMD-check](https://github.com/shikokuchuo/sakura/workflows/R-CMD-check/badge.svg)](https://github.com/shikokuchuo/sakura/actions)
+[![Codecov test coverage](https://codecov.io/gh/shikokuchuo/sakura/graph/badge.svg)](https://app.codecov.io/gh/shikokuchuo/sakura)
 <!-- badges: end -->
 
 ```
