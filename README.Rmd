@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # sakura
 
 <!-- badges: start -->
-[![R-universe status](https://shikokuchuo.r-universe.dev/badges/sakura)](https://shikokuchuo.r-universe.dev/sakura)
+[![CRAN status](https://www.r-pkg.org/badges/version/sakura)](https://CRAN.R-project.org/package=sakura)
 [![R-CMD-check](https://github.com/shikokuchuo/sakura/workflows/R-CMD-check/badge.svg)](https://github.com/shikokuchuo/sakura/actions)
 <!-- badges: end -->
 
@@ -37,6 +37,20 @@ Facilitates the serialization of even complex R objects, which contain non-syste
 This package was a request from a meeting of the [R Consortium](https://r-consortium.org/) [Marshalling and Serialization Working Group](https://github.com/RConsortium/marshalling-wg/) held at useR!2024 in Salzburg, Austria. It is designed to eventually provide a common framework for marshalling in R.
 
 It extracts the functionality embedded within the [mirai](https://github.com/shikokuchuo/mirai) async framework for use in other contexts.
+
+### Installation
+
+Install the current release from CRAN:
+
+```{r cran, eval=FALSE}
+install.packages("sakura")
+```
+
+Or the development version using:
+
+```{r devinstall, eval=FALSE}
+pak::pak("shikokuchuo/sakura")
+```
 
 ### Overview
 
@@ -88,14 +102,6 @@ We would like to thank in particular:
 - [R Core](https://www.r-project.org/contributors.html) for providing the interface to the R serialization mechanism.
 - [Luke Tierney](https://github.com/ltierney/) and [Mike Cheng](https://github.com/coolbutuseless) for their meticulous efforts in documenting the serialization interface.
 - [Daniel Falbel](https://github.com/dfalbel) for discussion around an efficient solution to serialization and transmission of torch tensors.
-
-### Installation
-
-The current development version is available from R-universe:
-
-```{r universe, eval=FALSE}
-install.packages("sakura", repos = "https://shikokuchuo.r-universe.dev")
-```
 
 --
 

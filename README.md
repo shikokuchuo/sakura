@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![R-universe
-status](https://shikokuchuo.r-universe.dev/badges/sakura)](https://shikokuchuo.r-universe.dev/sakura)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/sakura)](https://CRAN.R-project.org/package=sakura)
 [![R-CMD-check](https://github.com/shikokuchuo/sakura/workflows/R-CMD-check/badge.svg)](https://github.com/shikokuchuo/sakura/actions)
 <!-- badges: end -->
 
@@ -36,6 +36,20 @@ common framework for marshalling in R.
 It extracts the functionality embedded within the
 [mirai](https://github.com/shikokuchuo/mirai) async framework for use in
 other contexts.
+
+### Installation
+
+Install the current release from CRAN:
+
+``` r
+install.packages("sakura")
+```
+
+Or the development version using:
+
+``` r
+pak::pak("shikokuchuo/sakura")
+```
 
 ### Overview
 
@@ -125,15 +139,15 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.1564
-#>  0.8673
-#>  0.2980
-#>  0.3996
-#>  0.0063
+#>  0.1216
+#>  0.0190
+#>  0.8294
+#>  0.1692
+#>  0.6375
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 1.583086e-01 8.946060e-01 3.716900e-01 4.473476e-01 1.731119e-05
+#> [1] 0.4199754 0.8582703 0.9422515 0.6592459 0.2285102
 ```
 
 ### Acknowledgements
@@ -147,14 +161,6 @@ We would like to thank in particular:
   in documenting the serialization interface.
 - [Daniel Falbel](https://github.com/dfalbel) for discussion around an
   efficient solution to serialization and transmission of torch tensors.
-
-### Installation
-
-The current development version is available from R-universe:
-
-``` r
-install.packages("sakura", repos = "https://shikokuchuo.r-universe.dev")
-```
 
 –
 
