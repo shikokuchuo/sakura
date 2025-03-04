@@ -1,6 +1,6 @@
 # sakura (development version)
 
-* Implements a C level interface through `sakura_serialize()` and `sakura_unserialize()`.
+* Implements a C level interface with public declarations in `sakura.h`.
 
 # sakura 0.1.0
 
