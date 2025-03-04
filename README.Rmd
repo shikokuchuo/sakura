@@ -30,9 +30,9 @@ knitr::opts_chunk$set(
 
 ### Extension to R Serialization
 
-Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows optimal, one-pass integrated serialization that combines R serialization with third-party serialization methods.
+Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows an integrated single-pass operation that combines R serialization with third-party serialization methods.
 
-Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, for use in parallel and distributed computing.
+Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, to enable their use in parallel and distributed computing.
 
 This package was a request from a meeting of the [R Consortium](https://r-consortium.org/) [Marshalling and Serialization Working Group](https://github.com/RConsortium/marshalling-wg/) held at useR!2024 in Salzburg, Austria. It is designed to eventually provide a common framework for marshalling in R.
 

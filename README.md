@@ -19,13 +19,13 @@ status](https://shikokuchuo.r-universe.dev/badges/sakura)](https://shikokuchuo.r
 ### Extension to R Serialization
 
 Extends the functionality of R serialization by augmenting the built-in
-reference hook system. This enhanced implementation allows optimal,
-one-pass integrated serialization that combines R serialization with
-third-party serialization methods.
+reference hook system. This enhanced implementation allows an integrated
+single-pass operation that combines R serialization with third-party
+serialization methods.
 
 Facilitates the serialization of even complex R objects, which contain
 non-system reference objects, such as those accessed via external
-pointers, for use in parallel and distributed computing.
+pointers, to enable their use in parallel and distributed computing.
 
 This package was a request from a meeting of the [R
 Consortium](https://r-consortium.org/) [Marshalling and Serialization
@@ -125,15 +125,15 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.6972
-#>  0.0887
-#>  0.0576
-#>  0.9132
-#>  0.4515
+#>  0.1564
+#>  0.8673
+#>  0.2980
+#>  0.3996
+#>  0.0063
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.79129934 0.31196571 0.70189057 0.53588851 0.00580887
+#> [1] 1.583086e-01 8.946060e-01 3.716900e-01 4.473476e-01 1.731119e-05
 ```
 
 ### Acknowledgements

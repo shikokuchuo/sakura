@@ -7,8 +7,13 @@
 \alias{sakura-package}
 \title{sakura: Extension to R Serialization}
 \description{
-Exposes the 'refhook' functionality of R serialization for alternative
-serialization of non-system reference objects.
+Extends the functionality of R serialization by augmenting the built-in
+reference hook system. This enhanced implementation allows an integrated
+single-pass operation that combines R serialization with third-party
+serialization methods. Facilitates the serialization of even complex R
+objects, which contain non-system reference objects, such as those accessed
+via external pointers, to enable their use in parallel and distributed
+computing.
 }
 \seealso{
 Useful links:

@@ -3,12 +3,12 @@ Type: Package
 Title: Extension to R Serialization
 Version: 0.1.0.9000
 Description: Extends the functionality of R serialization by augmenting the
-    built-in reference hook system. This enhanced implementation allows optimal,
-    one-pass integrated serialization that combines R serialization with
+    built-in reference hook system. This enhanced implementation allows an
+    integrated single-pass operation that combines R serialization with
     third-party serialization methods. Facilitates the serialization of even
     complex R objects, which contain non-system reference objects, such as those
-    accessed via external pointers, for use in parallel and distributed
-    computing.
+    accessed via external pointers, to enable their use in parallel and
+    distributed computing.
 Authors@R: 
     c(person(given = "Charlie",
              family = "Gao",
