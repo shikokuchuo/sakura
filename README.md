@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/sakura)](https://CRAN.R-project.org/package=sakura)
 [![R-CMD-check](https://github.com/shikokuchuo/sakura/workflows/R-CMD-check/badge.svg)](https://github.com/shikokuchuo/sakura/actions)
@@ -139,15 +141,15 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.1216
-#>  0.0190
-#>  0.8294
-#>  0.1692
-#>  0.6375
+#>  0.0894
+#>  0.4082
+#>  0.4052
+#>  0.3690
+#>  0.8904
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.4199754 0.8582703 0.9422515 0.6592459 0.2285102
+#> [1] 0.7977531 0.3245908 0.5163450 0.3936336 0.1685294
 ```
 
 ### Acknowledgements
