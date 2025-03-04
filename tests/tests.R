@@ -21,10 +21,10 @@ test_error(unserialize(raw(1)), "data could not be unserialized")
 
 # mock torch serialization
 torch_serialize <- function(x) {
-  lapply(x, charToRaw)
+  as.raw(length(x))
 }
 torch_load <- function(x) {
-  lapply(x, rawToChar)
+  lapply(seq_len(as.integer(x)), new.env)
 }
 cfg <- serial_config(
   class = "torch_tensor",
@@ -33,11 +33,11 @@ cfg <- serial_config(
   vec = TRUE
 )
 test_type("pairlist", cfg)
-obj <- list(tensor = "a very long tensor", vector = runif(1000L))
-class(obj) <- "torch_tensor"
+obj <- list(tensor = new.env(), env = new.env(), vector = runif(1000L))
+class(obj$tensor) <- "torch_tensor"
 vec <- serialize(obj, cfg)
 test_type("raw", vec)
-test_true(identical(unserialize(vec, cfg), obj))
+test_true(all.equal(unserialize(vec, cfg), obj))
 
 if (requireNamespace("arrow", quietly = TRUE)) {
   cfga <- serial_config(
@@ -47,7 +47,10 @@ if (requireNamespace("arrow", quietly = TRUE)) {
   )
   test_type("pairlist", cfga)
   test_type("raw", serialize(obj, cfga))
-  x <- list(arrow::as_arrow_table(iris), arrow::as_arrow_table(mtcars))
+  x <- list(
+    a = arrow::as_arrow_table(iris),
+    b = arrow::as_arrow_table(mtcars)
+  )
   vec <- serialize(x, cfga)
   test_type("raw", vec)
   test_true(all.equal(unserialize(vec, cfga), x))
