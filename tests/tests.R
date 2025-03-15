@@ -21,10 +21,10 @@ test_error(unserialize(raw(1)), "data could not be unserialized")
 
 # mock torch serialization
 torch_serialize <- function(x) {
-  as.raw(length(x))
+  base::serialize(x, connection = NULL)
 }
 torch_load <- function(x) {
-  lapply(seq_len(as.integer(x)), new.env)
+  base::unserialize(x)
 }
 cfg <- serial_config(
   class = "torch_tensor",
