@@ -23,6 +23,9 @@ URL: https://shikokuchuo.net/sakura/, https://github.com/shikokuchuo/sakura/
 Encoding: UTF-8
 Depends: 
     R (>= 3.5)
+Imports:
+    Rcpp
+LinkingTo: Rcpp
 Suggests:
     arrow
 RoxygenNote: 7.3.2
