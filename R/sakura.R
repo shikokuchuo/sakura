@@ -43,11 +43,10 @@
 #' @export
 #'
 serialize <- function(x, hook = NULL) {
-  if(is.null(hook)) {
-    return(base::serialize(x, NULL, xdr=FALSE))
-  } else {
-    .Call(sakura_r_serialize, x, hook[[1]], hook[[2]])
-  }
+
+  is.null(hook) && return(base::serialize(x, NULL, xdr = FALSE))
+  .Call(sakura_r_serialize, x, hook)
+
 }
 
 #' @examplesIf requireNamespace("torch", quietly = TRUE)
@@ -59,16 +58,10 @@ serialize <- function(x, hook = NULL) {
 #' @export
 #'
 unserialize <- function(x, hook = NULL) {
-  if(is.null(hook)) {
-    tryCatch(
-      base::unserialize(x),
-      error = function(e) {
-        stop("data could not be unserialized")
-      }
-    )
-  } else {
-    .Call(sakura_r_unserialize, x, hook[[3]])
-  }
+
+  is.null(hook) && return(base::unserialize(x))
+  .Call(sakura_r_unserialize, x, hook)
+
 }
 
 #' Create Serialization Configuration

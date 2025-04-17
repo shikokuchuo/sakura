@@ -158,11 +158,14 @@ void sakura_unserialize_init(SEXP bundle_xptr, R_inpstream_t stream, R_pstream_d
 
 }
 
-void sakura_serialize(nano_buf *buf, SEXP object, SEXP klass, SEXP hook_func) {
+void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
 
   buf->buf = R_Calloc(SAKURA_INIT_BUFSIZE, unsigned char);
   buf->len = SAKURA_INIT_BUFSIZE;
   buf->cur = 0;
+
+  SEXP klass = CAR(hook);
+  SEXP hook_func = CADR(hook);
 
   sakura_serial_bundle b;
   SEXP bundle;
@@ -189,6 +192,8 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
   nbuf.len = sz;
   nbuf.cur = 0;
 
+  SEXP hook_func = CADDR(hook);
+
   struct R_inpstream_st input_stream;
   sakura_serial_bundle b;
   SEXP bundle, out;
@@ -199,7 +204,7 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
     bundle,
     &input_stream,
     (R_pstream_data_t) &nbuf,
-    hook,
+    hook_func,
     nano_read_bytes);
 
   out = R_Unserialize(&input_stream);
@@ -211,10 +216,10 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
 
 // R API functions -------------------------------------------------------------
 
-SEXP sakura_r_serialize(SEXP object, SEXP klass, SEXP hook_func) {
+SEXP sakura_r_serialize(SEXP object, SEXP hook) {
 
   nano_buf buf;
-  sakura_serialize(&buf, object, klass, hook_func);
+  sakura_serialize(&buf, object, hook);
 
   SEXP out = Rf_allocVector(RAWSXP, buf.cur);
   memcpy(RAW(out), buf.buf, buf.cur);
@@ -224,8 +229,8 @@ SEXP sakura_r_serialize(SEXP object, SEXP klass, SEXP hook_func) {
 
 }
 
-SEXP sakura_r_unserialize(SEXP object, SEXP hook_func) {
+SEXP sakura_r_unserialize(SEXP object, SEXP hook) {
 
-  return sakura_unserialize(RAW(object), XLENGTH(object), hook_func);
+  return sakura_unserialize(RAW(object), XLENGTH(object), hook);
 
 }

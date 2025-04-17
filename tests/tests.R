@@ -17,7 +17,7 @@ df <- data.frame(a = 1, b = "a")
 test_type("raw", serialize(df))
 test_class("data.frame", unserialize(serialize(df)))
 test_identical(unserialize(serialize(df)), df)
-test_error(unserialize(raw(1)), "data could not be unserialized")
+test_error(unserialize(raw(1)))
 
 if (requireNamespace("torch", quietly = TRUE)) {
   cfg <- serial_config(

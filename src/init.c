@@ -3,7 +3,7 @@
 #include "sakura.h"
 
 static const R_CallMethodDef callMethods[] = {
-  {"sakura_r_serialize", (DL_FUNC) &sakura_r_serialize, 3},
+  {"sakura_r_serialize", (DL_FUNC) &sakura_r_serialize, 2},
   {"sakura_r_unserialize", (DL_FUNC) &sakura_r_unserialize, 2},
   {NULL, NULL, 0}
 };

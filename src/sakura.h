@@ -39,10 +39,10 @@ typedef struct sakura_unserial_bundle_s {
 #define SAKURA_SERIAL_VER 3
 #define SAKURA_SERIAL_THR 134217728
 
-void sakura_serialize(nano_buf *, SEXP, SEXP, SEXP);
+void sakura_serialize(nano_buf *, SEXP, SEXP);
 SEXP sakura_unserialize(unsigned char *, size_t, SEXP);
 
-SEXP sakura_r_serialize(SEXP, SEXP, SEXP);
+SEXP sakura_r_serialize(SEXP, SEXP);
 SEXP sakura_r_unserialize(SEXP, SEXP);
 
 #endif
