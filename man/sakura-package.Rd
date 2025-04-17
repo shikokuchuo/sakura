@@ -28,6 +28,7 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Posit Software, PBC [copyright holder, funder]
   \item Hibiki AI Limited [copyright holder]
 }
 
