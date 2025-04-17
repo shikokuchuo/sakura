@@ -13,7 +13,7 @@ unserialize(x, hook = NULL)
 \item{x}{an object.}
 
 \item{hook}{[default NULL] optionally, a configuration returned by
-\code{\link{serial_config}}.}
+\code{\link[=serial_config]{serial_config()}}.}
 }
 \value{
 For serialize: a raw vector. For unserialize: the unserialized object.

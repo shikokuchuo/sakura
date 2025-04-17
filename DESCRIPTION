@@ -27,4 +27,5 @@ Suggests:
     arrow,
     torch
 RoxygenNote: 7.3.2
+Roxygen: list(markdown = TRUE)
 Config/build/compilation-database: true

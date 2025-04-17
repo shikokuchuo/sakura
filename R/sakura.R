@@ -10,10 +10,6 @@
 #' via external pointers, to enable their use in parallel and distributed
 #' computing.
 #'
-#' @encoding UTF-8
-#' @author Charlie Gao \email{charlie.gao@@shikokuchuo.net}
-#'   (\href{https://orcid.org/0000-0002-0750-061X}{ORCID})
-#'
 #' @useDynLib sakura, .registration = TRUE
 #'
 "_PACKAGE"
@@ -24,8 +20,8 @@
 #' serialization and unserialization of non-system reference objects.
 #'
 #' @param x an object.
-#' @param hook [default NULL] optionally, a configuration returned by
-#'   \code{\link{serial_config}}.
+#' @param hook \[default NULL\] optionally, a configuration returned by
+#'   [serial_config()].
 #'
 #' @return For serialize: a raw vector. For unserialize: the unserialized object.
 #'
@@ -77,36 +73,27 @@ unserialize <- function(x, hook = NULL) {
 #' of R native serialization. This allows their use across different R sessions.
 #'
 #' @param class character string of the class of object custom serialization
-#'   functions are applied to, e.g. \sQuote{ArrowTabular} or
-#'   \sQuote{torch_tensor}.
+#'   functions are applied to, e.g. 'ArrowTabular' or 'torch_tensor'.
 #' @param sfunc a function that accepts a reference object inheriting from
-#'   \sQuote{class} (or a list of such objects) and returns a raw vector.
+#'   `class` and returns a raw vector.
 #' @param ufunc a function that accepts a raw vector and returns a reference
-#'   object (or list of such objects).
-#' @param vec [default FALSE] whether or not the serialization functions are
-#'   vectorized. If FALSE, they should accept and return reference objects
-#'   individually e.g. \code{arrow::write_to_raw} and
-#'   \code{arrow::read_ipc_stream}. If TRUE, they should accept and return a
-#'   list of reference objects, e.g. \code{torch::torch_serialize} and
-#'   \code{torch::torch_load}.
+#'   object.
 #'
 #' @return A pairlist comprising the configuration. This may be provided to the
-#'   'hook' argument of \code{\link{serialize}} and \code{\link{unserialize}}.
+#'   `hook` argument of [serialize()] and [unserialize()].
 #'
 #' @examples
 #' serial_config("test_class", base::serialize, base::unserialize)
 #'
 #' @export
 #'
-serial_config <- function(class, sfunc, ufunc, vec = FALSE) {
+serial_config <- function(class, sfunc, ufunc) {
 
   is.character(class) ||
     stop("'class' must be a character string")
   is.function(sfunc) && is.function(ufunc) ||
     stop("both 'sfunc' and 'ufunc' must be functions")
-  is.logical(vec) ||
-    stop("'vec' must be a logical value")
 
-  pairlist(class, sfunc, ufunc, isTRUE(vec))
+  pairlist(class, sfunc, ufunc)
 
 }
