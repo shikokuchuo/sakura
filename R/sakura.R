@@ -50,6 +50,11 @@ serialize <- function(x, hook = NULL) {
   }
 }
 
+#' @examplesIf requireNamespace("torch", quietly = TRUE)
+#' x <- list(torch::torch_rand(5L), runif(5L))
+#' cfg <- serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
+#' unserialize(serialize(x, cfg), cfg)
+#'
 #' @rdname serialize
 #' @export
 #'

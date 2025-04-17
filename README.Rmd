@@ -38,7 +38,7 @@ Facilitates the serialization of even complex R objects, which contain non-syste
 
 This package was a request from a meeting of the [R Consortium](https://r-consortium.org/) [Marshalling and Serialization Working Group](https://github.com/RConsortium/marshalling-wg/) held at useR!2024 in Salzburg, Austria. It is designed to eventually provide a common framework for marshalling in R.
 
-It extracts the functionality embedded within the [mirai](https://github.com/shikokuchuo/mirai) async framework for use in other contexts.
+It extracts the functionality embedded within the [mirai](https://github.com/r-lib/mirai) async framework for use in other contexts.
 
 ### Installation
 
@@ -81,7 +81,7 @@ sakura::unserialize(sakura::serialize(obj, cfg), cfg)
 ```
 This time, the arrow tables are handled seamlessly.
 
-Other types of serialization function are vectorized and in this case, the configuration should be created specifying `vec = TRUE`. Using `torch` as an example:
+Using `torch` as another example:
 
 ```{r torchfail, error=TRUE}
 library(torch)
@@ -92,7 +92,7 @@ unserialize(serialize(x, NULL))
 Base R serialization above fails, but `sakura` serialization succeeds:
 
 ```{r torchpass}
-cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torch_load, vec = TRUE)
+cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 ```

@@ -37,4 +37,9 @@ cfg <- serial_config(
 raw <- serialize(obj, cfg)
 unserialize(raw, cfg)
 \dontshow{\}) # examplesIf}
+\dontshow{if (requireNamespace("torch", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+x <- list(torch::torch_rand(5L), runif(5L))
+cfg <- serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
+unserialize(serialize(x, cfg), cfg)
+\dontshow{\}) # examplesIf}
 }

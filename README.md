@@ -38,8 +38,8 @@ useR!2024 in Salzburg, Austria. It is designed to eventually provide a
 common framework for marshalling in R.
 
 It extracts the functionality embedded within the
-[mirai](https://github.com/shikokuchuo/mirai) async framework for use in
-other contexts.
+[mirai](https://github.com/r-lib/mirai) async framework for use in other
+contexts.
 
 ### Installation
 
@@ -121,9 +121,7 @@ sakura::unserialize(sakura::serialize(obj, cfg), cfg)
 
 This time, the arrow tables are handled seamlessly.
 
-Other types of serialization function are vectorized and in this case,
-the configuration should be created specifying `vec = TRUE`. Using
-`torch` as an example:
+Using `torch` as another example:
 
 ``` r
 library(torch)
@@ -138,20 +136,20 @@ unserialize(serialize(x, NULL))
 Base R serialization above fails, but `sakura` serialization succeeds:
 
 ``` r
-cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torch_load, vec = TRUE)
+cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.8650
-#>  0.9405
-#>  0.8917
-#>  0.1164
-#>  0.6513
+#>  0.9885
+#>  0.5773
+#>  0.9892
+#>  0.3081
+#>  0.3537
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.3048439 0.5453249 0.8527941 0.5749037 0.7142786
+#> [1] 0.34333701 0.30562588 0.08964682 0.75173197 0.10512006
 ```
 
 ### C Interface
