@@ -21,9 +21,6 @@ typedef struct nano_buf_s {
   size_t cur;
 } nano_buf;
 
-// bundle of objects passed to hook function
-// hook: serialization hook function passed from R
-// output stream: output stream for serialization
 typedef struct sakura_serial_bundle_s {
   R_outpstream_t stream;
   const char *klass;

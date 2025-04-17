@@ -40,7 +40,7 @@ static void nano_read_bytes(R_inpstream_t stream, void *dst, int len) {
 
 }
 
-static SEXP nano_serializeHook(SEXP x, SEXP bundle_xptr) {
+static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   sakura_serial_bundle * bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
   R_outpstream_t stream = bundle->stream;
@@ -88,7 +88,7 @@ static SEXP nano_serializeHook(SEXP x, SEXP bundle_xptr) {
 
 }
 
-static SEXP nano_unserializeHook(SEXP x, SEXP bundle_xptr) {
+static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
 
   sakura_unserial_bundle * bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
   R_inpstream_t stream = bundle->stream;
@@ -132,7 +132,7 @@ void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_da
     SAKURA_SERIAL_VER,
     NULL,
     outbytes,
-    nano_serializeHook,
+    nano_serialize_hook,
     bundle_xptr
   );
   bundle->stream = stream;
@@ -151,7 +151,7 @@ void sakura_unserialize_init(SEXP bundle_xptr, R_inpstream_t stream, R_pstream_d
     R_pstream_binary_format,
     NULL,
     inbytes,
-    nano_unserializeHook,
+    nano_unserialize_hook,
     bundle_xptr
   );
   bundle->stream = stream;
