@@ -24,16 +24,16 @@ typedef struct nano_buf_s {
 // bundle of objects passed to hook function
 // hook: serialization hook function passed from R
 // output stream: output stream for serialization
-typedef struct SakuraSerializeBundle {
-  R_outpstream_t stream; // pointer to R_outpstream_st
-  const char * klass_name;
+typedef struct sakura_serial_bundle_s {
+  R_outpstream_t stream;
+  const char *klass;
   SEXP hook_func;
-} SakuraSerializeBundle;
+} sakura_serial_bundle;
 
-typedef struct SakuraUnserializeBundle {
-  R_inpstream_t stream; // pointer to R_inpstream_st
+typedef struct sakura_unserial_bundle_s {
+  R_inpstream_t stream;
   SEXP hook_func;
-} SakuraUnserializeBundle;
+} sakura_unserial_bundle;
 
 #define SAKURA_INIT_BUFSIZE 4096
 #define SAKURA_SERIAL_VER 3
