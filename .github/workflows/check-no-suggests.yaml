@@ -49,7 +49,6 @@ jobs:
           cache: false
           extra-packages: |
             any::rcmdcheck
-            any::litedown
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
