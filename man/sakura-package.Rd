@@ -26,6 +26,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Charlie Gao \email{charlie.gao@shikokuchuo.net} (\href{https://orcid.org/0000-0002-0750-061X}{ORCID})
 
+Authors:
+\itemize{
+  \item Travers Ching \email{traversc@gmail.com}
+}
+
 Other contributors:
 \itemize{
   \item Posit Software, PBC [copyright holder, funder]
