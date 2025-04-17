@@ -12,7 +12,7 @@ typedef struct nano_buf_s {
   size_t cur;
 } nano_buf;
 
-typedef void (*sakura_sfunc)(nano_buf *, SEXP, SEXP);
+typedef void (*sakura_sfunc)(nano_buf *, SEXP, SEXP, SEXP);
 typedef SEXP (*sakura_ufunc)(unsigned char *, size_t, SEXP);
 
 #endif

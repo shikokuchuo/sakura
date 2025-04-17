@@ -46,12 +46,29 @@
 #'
 #' @export
 #'
-serialize <- function(x, hook = NULL) .Call(sakura_r_serialize, x, hook)
+serialize <- function(x, hook = NULL) {
+  if(is.null(hook)) {
+    return(base::serialize(x, NULL, xdr=FALSE))
+  } else {
+    .Call(sakura_r_serialize, x, hook[[1]], hook[[2]])
+  }
+}
 
 #' @rdname serialize
 #' @export
 #'
-unserialize <- function(x, hook = NULL) .Call(sakura_r_unserialize, x, hook)
+unserialize <- function(x, hook = NULL) {
+  if(is.null(hook)) {
+    tryCatch(
+      base::unserialize(x),
+      error = function(e) {
+        stop("data could not be unserialized")
+      }
+    )
+  } else {
+    .Call(sakura_r_unserialize, x, hook[[3]])
+  }
+}
 
 #' Create Serialization Configuration
 #'
