@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Extension to R Serialization">
@@ -79,7 +79,7 @@
 <p>Extends the functionality of R serialization by augmenting the built-in reference hook system. This enhanced implementation allows an integrated single-pass operation that combines R serialization with third-party serialization methods.</p>
 <p>Facilitates the serialization of even complex R objects, which contain non-system reference objects, such as those accessed via external pointers, to enable their use in parallel and distributed computing.</p>
 <p>This package was a request from a meeting of the <a href="https://r-consortium.org/" class="external-link">R Consortium</a> <a href="https://github.com/RConsortium/marshalling-wg/" class="external-link">Marshalling and Serialization Working Group</a> held at useR!2024 in Salzburg, Austria. It is designed to eventually provide a common framework for marshalling in R.</p>
-<p>It extracts the functionality embedded within the <a href="https://github.com/shikokuchuo/mirai" class="external-link">mirai</a> async framework for use in other contexts.</p>
+<p>It extracts the functionality embedded within the <a href="https://github.com/r-lib/mirai" class="external-link">mirai</a> async framework for use in other contexts.</p>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -142,10 +142,10 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; See $metadata for additional Schema metadata</span></span></code></pre></div>
 <p>This time, the arrow tables are handled seamlessly.</p>
-<p>Other types of serialization function are vectorized and in this case, the configuration should be created specifying <code>vec = TRUE</code>. Using <code>torch</code> as an example:</p>
+<p>Using <code>torch</code> as another example:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">torch_rand</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_rand.html" class="external-link">torch_rand</a></span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
@@ -153,20 +153,20 @@
 <span><span class="co">#&gt; Error in (function (self) : external pointer is not valid</span></span></code></pre></div>
 <p>Base R serialization above fails, but <code>sakura</code> serialization succeeds:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serial_config.html">serial_config</a></span><span class="op">(</span><span class="st">"torch_tensor"</span>, <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_serialize</span>, <span class="fu">torch</span><span class="fu">::</span><span class="va">torch_load</span>, vec <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serial_config.html">serial_config</a></span><span class="op">(</span><span class="st">"torch_tensor"</span>, <span class="fu">torch</span><span class="fu">::</span><span class="va"><a href="https://torch.mlverse.org/docs/reference/torch_serialize.html" class="external-link">torch_serialize</a></span>, <span class="fu">torch</span><span class="fu">::</span><span class="va"><a href="https://torch.mlverse.org/docs/reference/torch_load.html" class="external-link">torch_load</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">unserialize</a></span><span class="op">(</span><span class="fu">sakura</span><span class="fu">::</span><span class="fu"><a href="reference/serialize.html">serialize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">cfg</span><span class="op">)</span>, <span class="va">cfg</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; torch_tensor</span></span>
-<span><span class="co">#&gt;  0.8650</span></span>
-<span><span class="co">#&gt;  0.9405</span></span>
-<span><span class="co">#&gt;  0.8917</span></span>
-<span><span class="co">#&gt;  0.1164</span></span>
-<span><span class="co">#&gt;  0.6513</span></span>
+<span><span class="co">#&gt;  0.9885</span></span>
+<span><span class="co">#&gt;  0.5773</span></span>
+<span><span class="co">#&gt;  0.9892</span></span>
+<span><span class="co">#&gt;  0.3081</span></span>
+<span><span class="co">#&gt;  0.3537</span></span>
 <span><span class="co">#&gt; [ CPUFloatType{5} ]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.3048439 0.5453249 0.8527941 0.5749037 0.7142786</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.34333701 0.30562588 0.08964682 0.75173197 0.10512006</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="c-interface">C Interface<a class="anchor" aria-label="anchor" href="#c-interface"></a>
@@ -232,6 +232,8 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Charlie Gao <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0750-061X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Travers Ching <br><small class="roles"> Author </small>  </li>
+<li>Posit Software, PBC <br><small class="roles"> Copyright holder, funder </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -251,7 +253,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Charlie Gao.</p>
+  <p>Developed by Charlie Gao, Travers Ching, Posit Software, PBC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
