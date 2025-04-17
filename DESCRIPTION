@@ -24,6 +24,7 @@ Encoding: UTF-8
 Depends: 
     R (>= 3.5)
 Suggests:
-    arrow
+    arrow,
+    torch
 RoxygenNote: 7.3.2
 Config/build/compilation-database: true
