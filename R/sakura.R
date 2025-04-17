@@ -42,12 +42,8 @@
 #'
 #' @export
 #'
-serialize <- function(x, hook = NULL) {
-
-  is.null(hook) && return(base::serialize(x, NULL, xdr = FALSE))
+serialize <- function(x, hook = NULL)
   .Call(sakura_r_serialize, x, hook)
-
-}
 
 #' @examplesIf requireNamespace("torch", quietly = TRUE)
 #' x <- list(torch::torch_rand(5L), runif(5L))
@@ -57,12 +53,8 @@ serialize <- function(x, hook = NULL) {
 #' @rdname serialize
 #' @export
 #'
-unserialize <- function(x, hook = NULL) {
-
-  is.null(hook) && return(base::unserialize(x))
+unserialize <- function(x, hook = NULL)
   .Call(sakura_r_unserialize, x, hook)
-
-}
 
 #' Create Serialization Configuration
 #'
