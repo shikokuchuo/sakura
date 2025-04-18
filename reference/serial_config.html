@@ -60,18 +60,19 @@ of R native serialization. This allows their use across different R sessions.</p
 
 
 <dl><dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
-<dd><p>character string of the class of object custom serialization
-functions are applied to, e.g. 'ArrowTabular' or 'torch_tensor'.</p></dd>
+<dd><p>a character string (or vector) of the class of object custom
+serialization functions are applied to, e.g. <code>'ArrowTabular'</code> or
+<code>c('torch_tensor', 'ArrowTabular')</code>.</p></dd>
 
 
 <dt id="arg-sfunc">sfunc<a class="anchor" aria-label="anchor" href="#arg-sfunc"></a></dt>
-<dd><p>a function that accepts a reference object inheriting from
-<code>class</code> and returns a raw vector.</p></dd>
+<dd><p>a function (or list of functions) that accepts a reference
+object inheriting from <code>class</code> and returns a raw vector.</p></dd>
 
 
 <dt id="arg-ufunc">ufunc<a class="anchor" aria-label="anchor" href="#arg-ufunc"></a></dt>
-<dd><p>a function that accepts a raw vector and returns a reference
-object.</p></dd>
+<dd><p>a function (or list of functions) that accepts a raw vector and
+returns a reference object.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -111,7 +112,7 @@ object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ddbc8b90f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561543d46130&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
@@ -122,8 +123,99 @@ object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ddbf8a6bc8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561546d14e10&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">serial_config</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"class_one"</span>, <span class="st">"class_two"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize</a></span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize</a></span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">unserialize</a></span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">unserialize</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "class_one" "class_two"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (object, connection, ascii = FALSE, xdr = TRUE, version = NULL, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     refhook = NULL) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!is.null(connection)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (!inherits(connection, "connection")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             stop("'connection' must be a connection")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (missing(ascii)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ascii &lt;- summary(connection)$text == "text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!ascii &amp;&amp; inherits(connection, "sockconn")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         .Internal(serializeb(object, connection, xdr, version, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         type &lt;- if (is.na(ascii)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             2L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else if (ascii) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             1L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else if (!xdr) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             3L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else 0L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         .Internal(serialize(object, connection, type, version, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561543d46130&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (object, connection, ascii = FALSE, xdr = TRUE, version = NULL, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     refhook = NULL) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!is.null(connection)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (!inherits(connection, "connection")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             stop("'connection' must be a connection")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         if (missing(ascii)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ascii &lt;- summary(connection)$text == "text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!ascii &amp;&amp; inherits(connection, "sockconn")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         .Internal(serializeb(object, connection, xdr, version, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         type &lt;- if (is.na(ascii)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             2L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else if (ascii) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             1L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else if (!xdr) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             3L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         else 0L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         .Internal(serialize(object, connection, type, version, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561543d46130&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (connection, refhook = NULL) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (typeof(connection) != "raw" &amp;&amp; !is.character(connection) &amp;&amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         !inherits(connection, "connection")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561546d14e10&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (connection, refhook = NULL) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (typeof(connection) != "raw" &amp;&amp; !is.character(connection) &amp;&amp; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         !inherits(connection, "connection")) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x561546d14e10&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
