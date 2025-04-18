@@ -95,7 +95,7 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   // write out binary serialization blob
   OutBytes(stream, RAW(nano_eval_res), (int) size);
 
-  return Rf_mkString(size_string); // this will write the PERSISTXP again
+  return R_BlankScalarString; // this will write the PERSISTXP again
 
 }
 
@@ -117,9 +117,9 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   PROTECT(raw = Rf_allocVector(RAWSXP, size));
   InBytes(stream, RAW(raw), (int) size);
 
-  // read in 40 additional bytes and discard them
-  char buf[40];
-  InBytes(stream, buf, 40);
+  // read in 20 additional bytes and discard them
+  char buf[20];
+  InBytes(stream, buf, 20);
 
   PROTECT(call = Rf_lcons(hook_func, Rf_cons(raw, R_NilValue)));
   out = Rf_eval(call, R_GlobalEnv);
