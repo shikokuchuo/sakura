@@ -141,11 +141,7 @@ void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_da
   R_InitOutPStream(
     stream,
     data,
-#ifdef WORDS_BIGENDIAN
-    R_pstream_xdr_format,
-#else
     R_pstream_binary_format,
-#endif
     SAKURA_SERIAL_VER,
     NULL,
     outbytes,
@@ -188,11 +184,7 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
     R_InitOutPStream(
       &output_stream,
       (R_pstream_data_t) buf,
-#ifdef WORDS_BIGENDIAN
-      R_pstream_xdr_format,
-#else
       R_pstream_binary_format,
-#endif
       SAKURA_SERIAL_VER,
       NULL,
       nano_write_bytes,
