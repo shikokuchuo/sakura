@@ -1,5 +1,6 @@
 # sakura (development version)
 
+* `serial_config()` can now be used to specify multiple custom serialization functions for different classes of object (#12).
 * Updates the internal mechanism to use inline serialization (@traversc and @shikokuchuo, #8).
 * `serial_config()` is simplified by removing the `vec` argument, as this is no longer relevant after the adoption of inline serialization.
 * Implements a C level interface with public declarations in `inst/include/sakura.h`.

@@ -41,7 +41,8 @@ unserialize(raw, cfg)
 x <- list(torch::torch_rand(5L), runif(5L))
 cfg <- serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 unserialize(serialize(x, cfg), cfg)
-
+\dontshow{\}) # examplesIf}
+\dontshow{if (requireNamespace("arrow", quietly = TRUE) && requireNamespace("torch", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cfg <- serial_config(
   c("torch_tensor", "ArrowTabular"),
   list(torch::torch_serialize, arrow::write_to_raw),

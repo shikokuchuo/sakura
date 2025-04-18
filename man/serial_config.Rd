@@ -7,14 +7,15 @@
 serial_config(class, sfunc, ufunc)
 }
 \arguments{
-\item{class}{character string of the class of object custom serialization
-functions are applied to, e.g. 'ArrowTabular' or 'torch_tensor'.}
+\item{class}{a character string (or vector) of the class of object custom
+serialization functions are applied to, e.g. \code{'ArrowTabular'} or
+\code{c('torch_tensor', 'ArrowTabular')}.}
 
-\item{sfunc}{a function that accepts a reference object inheriting from
-\code{class} and returns a raw vector.}
+\item{sfunc}{a function (or list of functions) that accepts a reference
+object inheriting from \code{class} and returns a raw vector.}
 
-\item{ufunc}{a function that accepts a raw vector and returns a reference
-object.}
+\item{ufunc}{a function (or list of functions) that accepts a raw vector and
+returns a reference object.}
 }
 \value{
 A pairlist comprising the configuration. This may be provided to the
@@ -27,10 +28,11 @@ of R native serialization. This allows their use across different R sessions.
 }
 \examples{
 serial_config("test_class", base::serialize, base::unserialize)
+
 serial_config(
-  c("torch_tensor", "ArrowTabular"),
-  list(torch::torch_serialize, arrow::write_to_raw),
-  list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+  c("class_one", "class_two"),
+  list(base::serialize, base::serialize),
+  list(base::unserialize, base::unserialize)
 )
 
 }

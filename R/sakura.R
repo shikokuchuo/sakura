@@ -40,16 +40,17 @@
 #' raw <- serialize(obj, cfg)
 #' unserialize(raw, cfg)
 #'
-#' @export
-#'
-serialize <- function(x, hook = NULL)
-  .Call(sakura_r_serialize, x, hook)
-
 #' @examplesIf requireNamespace("torch", quietly = TRUE)
 #' x <- list(torch::torch_rand(5L), runif(5L))
 #' cfg <- serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 #' unserialize(serialize(x, cfg), cfg)
 #'
+#' @export
+#'
+serialize <- function(x, hook = NULL)
+  .Call(sakura_r_serialize, x, hook)
+
+#' @examplesIf requireNamespace("arrow", quietly = TRUE) && requireNamespace("torch", quietly = TRUE)
 #' cfg <- serial_config(
 #'   c("torch_tensor", "ArrowTabular"),
 #'   list(torch::torch_serialize, arrow::write_to_raw),
@@ -70,22 +71,24 @@ unserialize <- function(x, hook = NULL)
 #' unserialization of non-system reference objects, using the 'refhook' system
 #' of R native serialization. This allows their use across different R sessions.
 #'
-#' @param class character string of the class of object custom serialization
-#'   functions are applied to, e.g. 'ArrowTabular' or 'torch_tensor'.
-#' @param sfunc a function that accepts a reference object inheriting from
-#'   `class` and returns a raw vector.
-#' @param ufunc a function that accepts a raw vector and returns a reference
-#'   object.
+#' @param class a character string (or vector) of the class of object custom
+#'   serialization functions are applied to, e.g. `'ArrowTabular'` or
+#'   `c('torch_tensor', 'ArrowTabular')`.
+#' @param sfunc a function (or list of functions) that accepts a reference
+#'   object inheriting from `class` and returns a raw vector.
+#' @param ufunc a function (or list of functions) that accepts a raw vector and
+#'   returns a reference object.
 #'
 #' @return A pairlist comprising the configuration. This may be provided to the
 #'   `hook` argument of [serialize()] and [unserialize()].
 #'
 #' @examples
 #' serial_config("test_class", base::serialize, base::unserialize)
+#'
 #' serial_config(
-#'   c("torch_tensor", "ArrowTabular"),
-#'   list(torch::torch_serialize, arrow::write_to_raw),
-#'   list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+#'   c("class_one", "class_two"),
+#'   list(base::serialize, base::serialize),
+#'   list(base::unserialize, base::unserialize)
 #' )
 #'
 #' @export

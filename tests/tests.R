@@ -26,7 +26,7 @@ if (requireNamespace("torch", quietly = TRUE)) {
     ufunc = torch::torch_load
   )
   test_type("pairlist", cfg)
-  obj <- list(a = torch::torch_rand(1e3), b = new.env(), vector = runif(1000L))
+  obj <- list(a = torch::torch_rand(1e3L), b = new.env(), vector = runif(1000L))
   vec <- serialize(obj, cfg)
   test_type("raw", vec)
   test_true(all.equal(unserialize(vec, cfg), obj))
@@ -47,4 +47,23 @@ if (requireNamespace("arrow", quietly = TRUE)) {
   vec <- serialize(x, cfga)
   test_type("raw", vec)
   test_true(all.equal(unserialize(vec, cfga), x))
+}
+
+if (requireNamespace("torch", quietly = TRUE) && requireNamespace("arrow", quietly = TRUE)) {
+  cfgc <- serial_config(
+    c("torch_tensor", "ArrowTabular"),
+    list(torch::torch_serialize, arrow::write_to_raw),
+    list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+  )
+  test_type("pairlist", cfgc)
+  test_type("raw", serialize(obj, cfga))
+  y <- list(
+    a = arrow::as_arrow_table(iris),
+    b = torch::torch_rand(1e3L),
+    c = new.env(),
+    runif(5L)
+  )
+  vec <- serialize(y, cfgc)
+  test_type("raw", vec)
+  test_true(all.equal(unserialize(vec, cfgc), y))
 }
