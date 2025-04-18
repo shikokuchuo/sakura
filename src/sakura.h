@@ -23,7 +23,7 @@ typedef struct nano_buf_s {
 
 typedef struct sakura_serial_bundle_s {
   R_outpstream_t stream;
-  const char *klass;
+  SEXP klass;
   SEXP hook_func;
 } sakura_serial_bundle;
 

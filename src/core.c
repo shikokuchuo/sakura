@@ -52,15 +52,24 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   sakura_serial_bundle * bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
   R_outpstream_t stream = bundle->stream;
-  const char *klass = bundle->klass;
+  SEXP klass = bundle->klass;
   SEXP hook_func = bundle->hook_func;
+  int len = (int) XLENGTH(klass), i = -1;
   void (*OutBytes)(R_outpstream_t, void *, int) = stream->OutBytes;
 
-  if (!Rf_inherits(x, klass))
-    return R_NilValue;
+  if (len > 1) {
+    i = 0;
+    do {
+      if (Rf_inherits(x, CHAR(STRING_ELT(klass, i))))
+        break;
+      i++;
+      if (i == len)
+        return R_NilValue;
+    } while (i < len);
+  }
 
   SEXP call;
-  PROTECT(call = Rf_lcons(hook_func, Rf_cons(x, R_NilValue)));
+  PROTECT(call = Rf_lcons(len < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(x, R_NilValue)));
   if (!R_ToplevelExec(nano_eval_safe, call) || TYPEOF(nano_eval_res) != RAWSXP) {
     // something went wrong
     UNPROTECT(1);
@@ -94,6 +103,7 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   // write out binary serialization blob
   OutBytes(stream, RAW(nano_eval_res), (int) size);
+  OutBytes(stream, &i, sizeof(int));      // 4
 
   return R_BlankScalarString; // this will write the PERSISTXP again
 
@@ -117,11 +127,14 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   PROTECT(raw = Rf_allocVector(RAWSXP, size));
   InBytes(stream, RAW(raw), (int) size);
 
+  int i;
+  InBytes(stream, &i, 4);
+
   // read in 20 additional bytes and discard them
   char buf[20];
   InBytes(stream, buf, 20);
 
-  PROTECT(call = Rf_lcons(hook_func, Rf_cons(raw, R_NilValue)));
+  PROTECT(call = Rf_lcons(i < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(raw, R_NilValue)));
   out = Rf_eval(call, R_GlobalEnv);
 
   UNPROTECT(2);
@@ -132,7 +145,7 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
 // C API functions -------------------------------------------------------------
 
 void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_data_t data,
-                           const char *klass, SEXP hook_func, void (*outbytes)(R_outpstream_t, void *, int)) {
+                           SEXP klass, SEXP hook_func, void (*outbytes)(R_outpstream_t, void *, int)) {
 
   sakura_serial_bundle * bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
 
@@ -207,7 +220,7 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
       bundle,
       &output_stream,
       (R_pstream_data_t) buf,
-      CHAR(STRING_ELT(klass, 0)),
+      klass,
       hook_func,
       nano_write_bytes);
 

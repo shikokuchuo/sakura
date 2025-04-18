@@ -27,5 +27,10 @@ of R native serialization. This allows their use across different R sessions.
 }
 \examples{
 serial_config("test_class", base::serialize, base::unserialize)
+serial_config(
+  c("torch_tensor", "ArrowTabular"),
+  list(torch::torch_serialize, arrow::write_to_raw),
+  list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+)
 
 }

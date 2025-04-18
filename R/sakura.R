@@ -74,15 +74,25 @@ unserialize <- function(x, hook = NULL)
 #'
 #' @examples
 #' serial_config("test_class", base::serialize, base::unserialize)
+#' serial_config(
+#'   c("torch_tensor", "ArrowTabular"),
+#'   list(torch::torch_serialize, arrow::write_to_raw),
+#'   list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+#' )
 #'
 #' @export
 #'
 serial_config <- function(class, sfunc, ufunc) {
 
   is.character(class) ||
-    stop("'class' must be a character string")
-  is.function(sfunc) && is.function(ufunc) ||
-    stop("both 'sfunc' and 'ufunc' must be functions")
+    stop("`class` must be a character string")
+  if (is.list(sfunc)) {
+    all(as.logical(lapply(sfunc, is.function))) && all(as.logical(lapply(ufunc, is.function)))
+  } else {
+    is.function(sfunc) && is.function(ufunc)
+  } || stop("both `sfunc` and `ufunc` must be functions")
+  length(class) == length(sfunc) && length(sfunc) == length(ufunc) ||
+    stop("`class`, `sfunc` and `ufunc` must be the same length")
 
   pairlist(class, sfunc, ufunc)
 
