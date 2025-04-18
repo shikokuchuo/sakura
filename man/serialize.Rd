@@ -41,5 +41,13 @@ unserialize(raw, cfg)
 x <- list(torch::torch_rand(5L), runif(5L))
 cfg <- serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 unserialize(serialize(x, cfg), cfg)
+
+cfg <- serial_config(
+  c("torch_tensor", "ArrowTabular"),
+  list(torch::torch_serialize, arrow::write_to_raw),
+  list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
+)
+y <- list(torch::torch_rand(5L), runif(5L), arrow::as_arrow_table(iris))
+unserialize(serialize(y, cfg), cfg)
 \dontshow{\}) # examplesIf}
 }

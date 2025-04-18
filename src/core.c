@@ -54,22 +54,21 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   R_outpstream_t stream = bundle->stream;
   SEXP klass = bundle->klass;
   SEXP hook_func = bundle->hook_func;
-  int len = (int) XLENGTH(klass), i = -1;
+  int len = (int) XLENGTH(klass), i = 0;
   void (*OutBytes)(R_outpstream_t, void *, int) = stream->OutBytes;
 
-  if (len > 1) {
-    i = 0;
-    do {
-      if (Rf_inherits(x, CHAR(STRING_ELT(klass, i))))
-        break;
-      i++;
-      if (i == len)
-        return R_NilValue;
-    } while (i < len);
-  }
+  do {
+    if (Rf_inherits(x, CHAR(STRING_ELT(klass, i)))) {
+      if (len == 1) i = -1;
+      break;
+    }
+    i++;
+    if (i == len)
+      return R_NilValue;
+  } while (i < len);
 
   SEXP call;
-  PROTECT(call = Rf_lcons(len < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(x, R_NilValue)));
+  PROTECT(call = Rf_lcons(i < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(x, R_NilValue)));
   if (!R_ToplevelExec(nano_eval_safe, call) || TYPEOF(nano_eval_res) != RAWSXP) {
     // something went wrong
     UNPROTECT(1);
