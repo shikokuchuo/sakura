@@ -40,14 +40,6 @@ static void nano_read_bytes(R_inpstream_t stream, void *dst, int len) {
 
 }
 
-static int nano_read_char(R_inpstream_t stream) {
-
-  nano_buf *buf = (nano_buf *) stream->data;
-  if (buf->cur >= buf->len) Rf_error("unserialization error");
-  return buf->buf[buf->cur++];
-
-}
-
 static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   sakura_serial_bundle *bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
@@ -243,7 +235,7 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
       &input_stream,
       (R_pstream_data_t) &nbuf,
       R_pstream_any_format,
-      nano_read_char,
+      NULL,
       nano_read_bytes,
       NULL,
       R_NilValue
