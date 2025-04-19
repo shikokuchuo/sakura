@@ -13,23 +13,36 @@ test_error <- function(x, containing = "") invisible(inherits(x <- tryCatch(x, e
 # ------------------------------------------------------------------------------
 
 test_library("sakura")
+
 df <- data.frame(a = 1, b = "a")
 test_type("raw", serialize(df))
 test_class("data.frame", unserialize(serialize(df)))
 test_identical(unserialize(serialize(df)), df)
 test_error(unserialize(raw(1)))
 
+cfg <- serial_config(
+  class = "test_klass",
+  sfunc = function(x) base::serialize(x, NULL),
+  ufunc = base::unserialize
+)
+test_type("pairlist", cfg)
+obj <- list(a = new.env(), b = new.env(), vector = runif(10L))
+class(obj$b) <- "test_klass"
+vec <- serialize(obj, cfg)
+test_type("raw", vec)
+test_true(all.equal(unserialize(vec, cfg), obj))
+
 if (requireNamespace("torch", quietly = TRUE)) {
-  cfg <- serial_config(
+  cfgt <- serial_config(
     class = "torch_tensor",
     sfunc = torch::torch_serialize,
     ufunc = torch::torch_load
   )
-  test_type("pairlist", cfg)
+  test_type("pairlist", cfgt)
   obj <- list(a = torch::torch_rand(1e3L), b = new.env(), vector = runif(1000L))
-  vec <- serialize(obj, cfg)
+  vec <- serialize(obj, cfgt)
   test_type("raw", vec)
-  test_true(all.equal(unserialize(vec, cfg), obj))
+  test_true(all.equal(unserialize(vec, cfgt), obj))
 }
 
 if (requireNamespace("arrow", quietly = TRUE)) {
@@ -39,7 +52,6 @@ if (requireNamespace("arrow", quietly = TRUE)) {
     function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE)
   )
   test_type("pairlist", cfga)
-  test_type("raw", serialize(obj, cfga))
   x <- list(
     a = arrow::as_arrow_table(iris),
     b = arrow::as_arrow_table(mtcars)
@@ -56,7 +68,6 @@ if (requireNamespace("torch", quietly = TRUE) && requireNamespace("arrow", quiet
     list(torch::torch_load, function(x) arrow::read_ipc_stream(x, as_data_frame = FALSE))
   )
   test_type("pairlist", cfgc)
-  test_type("raw", serialize(obj, cfga))
   y <- list(
     a = arrow::as_arrow_table(iris),
     b = torch::torch_rand(1e3L),
