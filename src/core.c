@@ -78,9 +78,6 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   // write out PERSISTSXP manually
   uint64_t size = XLENGTH(nano_eval_res);
-  if (size > INT_MAX)
-    Rf_error("Permitted serialization length exceeded");
-
   char size_string[21];
   snprintf(size_string, sizeof(size_string), "%020" PRIu64, size);
 
@@ -101,6 +98,10 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   OutBytes(stream, &size_string[0], 20);      // 40
 
   // write out binary serialization blob
+  while (size > INT_MAX) {
+    OutBytes(stream, RAW(nano_eval_res), INT_MAX);
+    size -= INT_MAX;
+  }
   OutBytes(stream, RAW(nano_eval_res), (int) size);
   // write out index if hook_func is a vector
   OutBytes(stream, &i, sizeof(int));      // 4
@@ -120,12 +121,16 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   if (strlen(size_string) != 20)
     Rf_error("Invalid string length for uint64_t conversion");
   uint64_t size = strtoul(size_string, NULL, 10);
-  if (size > INT_MAX)
-    Rf_error("Permitted serialization length exceeded");
 
   SEXP raw, call, out;
   PROTECT(raw = Rf_allocVector(RAWSXP, size));
-  InBytes(stream, RAW(raw), (int) size);
+  unsigned char *dest = RAW(raw);
+  while (size > INT_MAX) {
+    InBytes(stream, dest, INT_MAX);
+    dest += INT_MAX;
+    size -= INT_MAX;
+  }
+  InBytes(stream, dest, (int) size);
 
   int i;
   InBytes(stream, &i, 4);
