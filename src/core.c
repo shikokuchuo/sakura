@@ -50,25 +50,25 @@ static int nano_read_char(R_inpstream_t stream) {
 
 static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
-  sakura_serial_bundle * bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
+  sakura_serial_bundle *bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
   R_outpstream_t stream = bundle->stream;
   SEXP klass = bundle->klass;
   SEXP hook_func = bundle->hook_func;
-  int len = (int) XLENGTH(klass), i = 0;
+  int len = (int) XLENGTH(klass), i;
   void (*OutBytes)(R_outpstream_t, void *, int) = stream->OutBytes;
 
-  do {
-    if (Rf_inherits(x, CHAR(STRING_ELT(klass, i)))) {
-      if (len == 1) i = -1;
-      break;
-    }
-    i++;
-    if (i == len)
-      return R_NilValue;
-  } while (i < len);
+  for (i = 1; i <= len; i++) {
+    if (Rf_inherits(x, CHAR(STRING_ELT(klass, i - 1))))
+      goto resume;
+  }
 
+  return R_NilValue;
+
+  resume:
+
+  if (len == 1) i = 0;
   SEXP call;
-  PROTECT(call = Rf_lcons(i < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(x, R_NilValue)));
+  PROTECT(call = Rf_lcons(i ? VECTOR_ELT(hook_func, i - 1) : hook_func, Rf_cons(x, R_NilValue)));
   if (!R_ToplevelExec(nano_eval_safe, call) || TYPEOF(nano_eval_res) != RAWSXP) {
     // something went wrong
     UNPROTECT(1);
@@ -76,7 +76,7 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   }
   UNPROTECT(1);
 
-  // write out PERSISTXP manually
+  // write out PERSISTSXP manually
   uint64_t size = XLENGTH(nano_eval_res);
   if (size > INT_MAX)
     Rf_error("Permitted serialization length exceeded");
@@ -102,15 +102,16 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
 
   // write out binary serialization blob
   OutBytes(stream, RAW(nano_eval_res), (int) size);
+  // write out index if hook_func is a vector
   OutBytes(stream, &i, sizeof(int));      // 4
 
-  return R_BlankScalarString; // this will write the PERSISTXP again
+  return R_BlankScalarString; // this will write the PERSISTSXP again
 
 }
 
 static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
 
-  sakura_unserial_bundle * bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
+  sakura_unserial_bundle *bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
   R_inpstream_t stream = bundle->stream;
   SEXP hook_func = bundle->hook_func;
   void (*InBytes)(R_inpstream_t, void *, int) = stream->InBytes;
@@ -133,7 +134,7 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   char buf[20];
   InBytes(stream, buf, 20);
 
-  PROTECT(call = Rf_lcons(i < 0 ? hook_func : VECTOR_ELT(hook_func, i), Rf_cons(raw, R_NilValue)));
+  PROTECT(call = Rf_lcons(i ? VECTOR_ELT(hook_func, i - 1) : hook_func, Rf_cons(raw, R_NilValue)));
   out = Rf_eval(call, R_GlobalEnv);
 
   UNPROTECT(2);
@@ -146,7 +147,7 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
 void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_data_t data,
                            SEXP klass, SEXP hook_func, void (*outbytes)(R_outpstream_t, void *, int)) {
 
-  sakura_serial_bundle * bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
+  sakura_serial_bundle *bundle = (sakura_serial_bundle *) R_ExternalPtrAddr(bundle_xptr);
 
   bundle->klass = klass;
   bundle->hook_func = hook_func;
@@ -167,7 +168,7 @@ void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_da
 void sakura_unserialize_init(SEXP bundle_xptr, R_inpstream_t stream, R_pstream_data_t data,
                              SEXP hook_func, void (*inbytes)(R_inpstream_t, void *, int)) {
 
-  sakura_unserial_bundle * bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
+  sakura_unserial_bundle *bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
 
   bundle->hook_func = hook_func;
   R_InitInPStream(
@@ -204,29 +205,23 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
       R_NilValue
     );
 
-    R_Serialize(object, &output_stream);
-
   } else {
 
-    SEXP klass = CAR(hook);
-    SEXP hook_func = CADR(hook);
-
     sakura_serial_bundle b;
-    SEXP bundle;
-    PROTECT(bundle = R_MakeExternalPtr(&b, R_NilValue, R_NilValue));
+    R_SetExternalPtrAddr(sakura_bundle, &b);
 
     sakura_serialize_init(
-      bundle,
+      sakura_bundle,
       &output_stream,
       (R_pstream_data_t) buf,
-      klass,
-      hook_func,
-      nano_write_bytes);
-
-    R_Serialize(object, &output_stream);
-    UNPROTECT(1);
+      CAR(hook),
+      CADR(hook),
+      nano_write_bytes
+    );
 
   }
+
+  R_Serialize(object, &output_stream);
 
 }
 
@@ -238,7 +233,6 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
   nbuf.cur = 0;
 
   struct R_inpstream_st input_stream;
-  SEXP out;
 
   if (hook == R_NilValue) {
 
@@ -252,30 +246,22 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
       R_NilValue
     );
 
-    out = R_Unserialize(&input_stream);
-
   } else {
 
-    SEXP hook_func = CADDR(hook);
-
-    sakura_serial_bundle b;
-    SEXP bundle;
-    PROTECT(bundle = R_MakeExternalPtr(&b, R_NilValue, R_NilValue));
+    sakura_unserial_bundle b;
+    R_SetExternalPtrAddr(sakura_bundle, &b);
 
     sakura_unserialize_init(
-      bundle,
+      sakura_bundle,
       &input_stream,
       (R_pstream_data_t) &nbuf,
-      hook_func,
-      nano_read_bytes);
-
-    out = R_Unserialize(&input_stream);
-
-    UNPROTECT(1);
+      CADDR(hook),
+      nano_read_bytes
+    );
 
   }
 
-  return out;
+  return R_Unserialize(&input_stream);
 
 }
 
