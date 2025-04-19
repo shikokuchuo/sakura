@@ -118,8 +118,6 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   void (*InBytes)(R_inpstream_t, void *, int) = stream->InBytes;
 
   const char *size_string = CHAR(STRING_ELT(x, 0));
-  if (strlen(size_string) != 20)
-    Rf_error("Invalid string length for uint64_t conversion");
   uint64_t size = strtoul(size_string, NULL, 10);
 
   SEXP raw, call, out;
