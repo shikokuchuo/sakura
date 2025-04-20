@@ -90,11 +90,13 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   OutBytes(stream, &size_string[0], 20);      // 40
 
   // write out binary serialization blob
-  while (size > INT_MAX) {
-    OutBytes(stream, RAW(nano_eval_res), INT_MAX);
-    size -= INT_MAX;
+  unsigned char *dest = RAW(nano_eval_res);
+  while (size > SAKURA_CHUNK_SIZE) {
+    OutBytes(stream, dest, SAKURA_CHUNK_SIZE);
+    dest += SAKURA_CHUNK_SIZE;
+    size -= SAKURA_CHUNK_SIZE;
   }
-  OutBytes(stream, RAW(nano_eval_res), (int) size);
+  OutBytes(stream, dest, (int) size);
   // write out index if hook_func is a vector
   OutBytes(stream, &i, sizeof(int));      // 4
 
@@ -115,10 +117,10 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   SEXP raw, call, out;
   PROTECT(raw = Rf_allocVector(RAWSXP, size));
   unsigned char *dest = RAW(raw);
-  while (size > INT_MAX) {
-    InBytes(stream, dest, INT_MAX);
-    dest += INT_MAX;
-    size -= INT_MAX;
+  while (size > SAKURA_CHUNK_SIZE) {
+    InBytes(stream, dest, SAKURA_CHUNK_SIZE);
+    dest += SAKURA_CHUNK_SIZE;
+    size -= SAKURA_CHUNK_SIZE;
   }
   InBytes(stream, dest, (int) size);
 

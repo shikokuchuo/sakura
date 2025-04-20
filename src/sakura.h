@@ -35,6 +35,7 @@ typedef struct sakura_unserial_bundle_s {
 #define SAKURA_INIT_BUFSIZE 4096
 #define SAKURA_SERIAL_VER 3
 #define SAKURA_SERIAL_THR 134217728
+#define SAKURA_CHUNK_SIZE INT_MAX // must be <= INT_MAX
 
 extern SEXP sakura_bundle;
 
