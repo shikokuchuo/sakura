@@ -202,6 +202,8 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
       R_NilValue
     );
 
+    R_Serialize(object, &output_stream);
+
   } else {
 
     sakura_serial_bundle b;
@@ -216,9 +218,10 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
       nano_write_bytes
     );
 
-  }
+    R_Serialize(object, &output_stream);
+    R_SetExternalPtrAddr(sakura_bundle, NULL);
 
-  R_Serialize(object, &output_stream);
+  }
 
 }
 
@@ -230,6 +233,7 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
   nbuf.cur = 0;
 
   struct R_inpstream_st input_stream;
+  SEXP out;
 
   if (hook == R_NilValue) {
 
@@ -242,6 +246,8 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
       NULL,
       R_NilValue
     );
+
+    out = R_Unserialize(&input_stream);
 
   } else {
 
@@ -256,9 +262,12 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
       nano_read_bytes
     );
 
+    out = R_Unserialize(&input_stream);
+    R_SetExternalPtrAddr(sakura_bundle, NULL);
+
   }
 
-  return R_Unserialize(&input_stream);
+  return out;
 
 }
 
