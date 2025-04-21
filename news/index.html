@@ -41,13 +41,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sakura-development-version">sakura (development version)<a class="anchor" aria-label="anchor" href="#sakura-development-version"></a></h2>
-<ul><li>Length of custom-serialized raw vector is no longer limited to <code>INT_MAX</code>.</li>
+<ul><li>Optimised internal mechanism using inline serialization (<a href="https://github.com/traversc" class="external-link">@traversc</a> and <a href="https://github.com/shikokuchuo" class="external-link">@shikokuchuo</a>, <a href="https://github.com/shikokuchuo/sakura/issues/8" class="external-link">#8</a>).</li>
 <li>
-<code><a href="../reference/serial_config.html">serial_config()</a></code> can now be used to specify multiple custom serialization functions for different classes of object (<a href="https://github.com/shikokuchuo/sakura/issues/12" class="external-link">#12</a>).</li>
-<li>Updates the internal mechanism to use inline serialization (<a href="https://github.com/traversc" class="external-link">@traversc</a> and <a href="https://github.com/shikokuchuo" class="external-link">@shikokuchuo</a>, <a href="https://github.com/shikokuchuo/sakura/issues/8" class="external-link">#8</a>).</li>
-<li>
-<code><a href="../reference/serial_config.html">serial_config()</a></code> is simplified by removing the <code>vec</code> argument, as this is no longer relevant after the adoption of inline serialization.</li>
-<li>Implements a C level interface with public declarations in <code>inst/include/sakura.h</code>.</li>
+<code><a href="../reference/serial_config.html">serial_config()</a></code> improvements:
+<ul><li>Accepts multiple custom serialization functions for different classes of object (<a href="https://github.com/shikokuchuo/sakura/issues/12" class="external-link">#12</a>).</li>
+<li>Simplified by removing the <code>vec</code> argument, as no longer applicable due to inline serialization.</li>
+</ul></li>
+<li>Each custom-serialized object is no longer limited to a raw vector of length <code>INT_MAX</code>.</li>
+<li>Implements a C level interface by registering C function callables.</li>
 <li>Package is re-licensed under the MIT licence.</li>
 </ul></div>
     <div class="section level2">
