@@ -46,21 +46,21 @@ static SEXP nano_serialize_hook(SEXP x, SEXP bundle_xptr) {
   R_outpstream_t stream = bundle->stream;
   SEXP klass = bundle->klass;
   SEXP hook_func = bundle->hook_func;
-  int len = (int) XLENGTH(klass), i;
+  int len = (int) XLENGTH(klass), match = 0, i;
   void (*OutBytes)(R_outpstream_t, void *, int) = stream->OutBytes;
 
-  for (i = 1; i <= len; i++) {
-    if (Rf_inherits(x, CHAR(STRING_ELT(klass, i - 1))))
-      goto resume;
+  for (i = 0; i < len; i++) {
+    if (Rf_inherits(x, CHAR(STRING_ELT(klass, i)))) {
+      match = 1;
+      break;
+    }
   }
 
-  return R_NilValue;
+  if (!match)
+    return R_NilValue;
 
-  resume:
-
-  if (len == 1) i = 0;
   SEXP call;
-  PROTECT(call = Rf_lcons(i ? VECTOR_ELT(hook_func, i - 1) : hook_func, Rf_cons(x, R_NilValue)));
+  PROTECT(call = Rf_lcons(VECTOR_ELT(hook_func, i), Rf_cons(x, R_NilValue)));
   if (!R_ToplevelExec(nano_eval_safe, call) || TYPEOF(nano_eval_res) != RAWSXP) {
     // something went wrong
     UNPROTECT(1);
@@ -131,7 +131,7 @@ static SEXP nano_unserialize_hook(SEXP x, SEXP bundle_xptr) {
   char buf[20];
   InBytes(stream, buf, 20);
 
-  PROTECT(call = Rf_lcons(i ? VECTOR_ELT(hook_func, i - 1) : hook_func, Rf_cons(raw, R_NilValue)));
+  PROTECT(call = Rf_lcons(VECTOR_ELT(hook_func, i), Rf_cons(raw, R_NilValue)));
   out = Rf_eval(call, R_GlobalEnv);
 
   UNPROTECT(2);
