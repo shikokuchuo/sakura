@@ -88,6 +88,7 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "test_class"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (object, connection, ascii = FALSE, xdr = TRUE, version = NULL, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     refhook = NULL) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
@@ -112,10 +113,12 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78a88d550&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5653486ee550&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (connection, refhook = NULL) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (typeof(connection) != "raw" &amp;&amp; !is.character(connection) &amp;&amp; </span>
@@ -123,8 +126,9 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78d85c5f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56534b6eb600&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">serial_config</span><span class="op">(</span></span></span>
@@ -161,7 +165,7 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78a88d550&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5653486ee550&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]][[2]]</span>
@@ -189,7 +193,7 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78a88d550&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5653486ee550&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -202,7 +206,7 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78d85c5f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56534b6eb600&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]][[2]]</span>
@@ -213,7 +217,7 @@ returns a reference object.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stop("'connection' must be a connection")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(unserialize(connection, refhook))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d78d85c5f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56534b6eb600&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
