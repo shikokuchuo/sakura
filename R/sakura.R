@@ -95,13 +95,13 @@ unserialize <- function(x, hook = NULL)
 #'
 serial_config <- function(class, sfunc, ufunc) {
 
+  if (is.function(sfunc)) sfunc <- list(sfunc)
+  if (is.function(ufunc)) ufunc <- list(ufunc)
+
   is.character(class) ||
-    stop("`class` must be a character string")
-  if (is.list(sfunc)) {
-    all(as.logical(lapply(sfunc, is.function))) && all(as.logical(lapply(ufunc, is.function)))
-  } else {
-    is.function(sfunc) && is.function(ufunc)
-  } || stop("both `sfunc` and `ufunc` must be functions")
+    stop("`class` must be a character vector")
+  all(as.logical(lapply(sfunc, is.function))) && all(as.logical(lapply(ufunc, is.function))) ||
+    stop("`sfunc` and `ufunc` must be functions or lists of functions")
   length(class) == length(sfunc) && length(sfunc) == length(ufunc) ||
     stop("`class`, `sfunc` and `ufunc` must be the same length")
 
