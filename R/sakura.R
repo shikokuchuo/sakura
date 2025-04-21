@@ -98,10 +98,14 @@ serial_config <- function(class, sfunc, ufunc) {
   is.character(class) ||
     stop("`class` must be a character string")
   if (is.list(sfunc)) {
-    all(as.logical(lapply(sfunc, is.function))) && all(as.logical(lapply(ufunc, is.function)))
+    ( all(as.logical(lapply(sfunc, is.function))) && all(as.logical(lapply(ufunc, is.function))) ) ||
+      stop("both `sfunc` and `ufunc` must be functions or list of functions")
   } else {
-    is.function(sfunc) && is.function(ufunc)
-  } || stop("both `sfunc` and `ufunc` must be functions")
+    ( is.function(sfunc) && is.function(ufunc) ) ||
+      stop("both `sfunc` and `ufunc` must be functions or list of functions")
+    sfunc <- list(sfunc)
+    ufunc <- list(ufunc)
+  }
   length(class) == length(sfunc) && length(sfunc) == length(ufunc) ||
     stop("`class`, `sfunc` and `ufunc` must be the same length")
 
