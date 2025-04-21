@@ -41,6 +41,8 @@ extern SEXP sakura_bundle;
 
 void sakura_serialize(nano_buf *, SEXP, SEXP);
 SEXP sakura_unserialize(unsigned char *, size_t, SEXP);
+void sakura_serialize_init(SEXP, R_outpstream_t, R_pstream_data_t, SEXP, SEXP, void (*)(R_outpstream_t, void *, int));
+void sakura_unserialize_init(SEXP, R_inpstream_t, R_pstream_data_t, SEXP, void (*)(R_inpstream_t, void *, int));
 
 SEXP sakura_r_serialize(SEXP, SEXP);
 SEXP sakura_r_unserialize(SEXP, SEXP);
