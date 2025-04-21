@@ -141,33 +141,31 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.9885
-#>  0.5773
-#>  0.9892
-#>  0.3081
-#>  0.3537
+#>  0.4540
+#>  0.2009
+#>  0.9935
+#>  0.0545
+#>  0.8483
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.34333701 0.30562588 0.08964682 0.75173197 0.10512006
+#> [1] 0.2024754 0.2513626 0.5177888 0.8914016 0.6242463
 ```
 
 ### C Interface
 
-A C level interface is provided. A public header file `sakura.h` is
-available in `inst/include` for all packages that declare sakura in
-`LinkingTo`. This may be used in the following way:
+A low-level interface is provided for use by other packages. The
+following C callables are registered:
 
 ``` c
-#include <sakura.h>
+sakura_serialize_init;
+sakura_unserialize_init;
 
-sakura_sfunc sakura_serialize;
-sakura_ufunc sakura_unserialize;
-
-// runtime initialization:
-sakura_serialize = (sakura_sfunc) R_GetCCallable("sakura", "sakura_serialize");
-sakura_unserialize = (sakura_ufunc) R_GetCCallable("sakura", "sakura_unserialize");
+sakura_serialize;
+sakura_unserialize;
 ```
+
+Their function signatures may be inspected in `src/sakura.h`.
 
 ### Acknowledgements
 

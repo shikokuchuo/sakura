@@ -99,18 +99,16 @@ sakura::unserialize(sakura::serialize(x, cfg), cfg)
 
 ### C Interface
 
-A C level interface is provided. A public header file `sakura.h` is available in `inst/include` for all packages that declare sakura in `LinkingTo`. This may be used in the following way:
+A low-level interface is provided for use by other packages. The following C callables are registered:
 
 ```c
-#include <sakura.h>
+sakura_serialize_init;
+sakura_unserialize_init;
 
-sakura_sfunc sakura_serialize;
-sakura_ufunc sakura_unserialize;
-
-// runtime initialization:
-sakura_serialize = (sakura_sfunc) R_GetCCallable("sakura", "sakura_serialize");
-sakura_unserialize = (sakura_ufunc) R_GetCCallable("sakura", "sakura_unserialize");
+sakura_serialize;
+sakura_unserialize;
 ```
+Their function signatures may be inspected in `src/sakura.h`.
 
 ### Acknowledgements
 
