@@ -148,6 +148,7 @@ void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_da
 
   bundle->klass = klass;
   bundle->hook_func = hook_func;
+  bundle->stream = stream;
   R_InitOutPStream(
     stream,
     data,
@@ -158,7 +159,6 @@ void sakura_serialize_init(SEXP bundle_xptr, R_outpstream_t stream, R_pstream_da
     nano_serialize_hook,
     bundle_xptr
   );
-  bundle->stream = stream;
 
 }
 
@@ -168,6 +168,7 @@ void sakura_unserialize_init(SEXP bundle_xptr, R_inpstream_t stream, R_pstream_d
   sakura_unserial_bundle *bundle = (sakura_unserial_bundle *) R_ExternalPtrAddr(bundle_xptr);
 
   bundle->hook_func = hook_func;
+  bundle->stream = stream;
   R_InitInPStream(
     stream,
     data,
@@ -177,7 +178,6 @@ void sakura_unserialize_init(SEXP bundle_xptr, R_inpstream_t stream, R_pstream_d
     nano_unserialize_hook,
     bundle_xptr
   );
-  bundle->stream = stream;
 
 }
 
@@ -213,8 +213,8 @@ void sakura_serialize(nano_buf *buf, SEXP object, SEXP hook) {
       sakura_bundle,
       &output_stream,
       (R_pstream_data_t) buf,
-      CAR(hook),
-      CADR(hook),
+      VECTOR_ELT(hook, 0),
+      VECTOR_ELT(hook, 1),
       nano_write_bytes
     );
 
@@ -258,7 +258,7 @@ SEXP sakura_unserialize(unsigned char *buf, size_t sz, SEXP hook) {
       sakura_bundle,
       &input_stream,
       (R_pstream_data_t) &nbuf,
-      CADDR(hook),
+      VECTOR_ELT(hook, 2),
       nano_read_bytes
     );
 

@@ -18,7 +18,7 @@ object inheriting from \code{class} and returns a raw vector.}
 returns a reference object.}
 }
 \value{
-A pairlist comprising the configuration. This may be provided to the
+A list comprising the configuration. This may be provided to the
 \code{hook} argument of \code{\link[=serialize]{serialize()}} and \code{\link[=unserialize]{unserialize()}}.
 }
 \description{

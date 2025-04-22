@@ -79,7 +79,7 @@ unserialize <- function(x, hook = NULL)
 #' @param ufunc a function (or list of functions) that accepts a raw vector and
 #'   returns a reference object.
 #'
-#' @return A pairlist comprising the configuration. This may be provided to the
+#' @return A list comprising the configuration. This may be provided to the
 #'   `hook` argument of [serialize()] and [unserialize()].
 #'
 #' @examples
@@ -105,6 +105,6 @@ serial_config <- function(class, sfunc, ufunc) {
   length(class) == length(sfunc) && length(sfunc) == length(ufunc) ||
     stop("`class`, `sfunc` and `ufunc` must be the same length")
 
-  pairlist(class, sfunc, ufunc)
+  list(class, sfunc, ufunc)
 
 }
