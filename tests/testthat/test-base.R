@@ -15,7 +15,7 @@ test_that("sakura mock refhooks work", {
   obj <- list(a = new.env(), b = new.env(), vector = runif(10L))
   class(obj$b) <- "test_klass"
   vec <- serialize(obj, cfg)
-  expect_type(cfg, "pairlist")
+  expect_type(cfg, "list")
   expect_type(vec, "raw")
   expect_true(all.equal(unserialize(vec, cfg), obj))
 })
