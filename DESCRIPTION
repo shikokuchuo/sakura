@@ -5,10 +5,7 @@ Version: 0.1.0.9000
 Authors@R: c(
     person("Charlie", "Gao", , "charlie.gao@shikokuchuo.net", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0750-061X")),
-    person("Travers", "Ching", , "traversc@gmail.com", role = "aut"),
-    person("Posit Software, PBC", role = c("cph", "fnd"),
-           comment = c(ROR = "03wc8by49")),
-    person("Hibiki AI Limited", role = "cph")
+    person("Travers", "Ching", , "traversc@gmail.com", role = "aut")
   )
 Description: Extends the functionality of R serialization by augmenting
     the built-in reference hook system. This enhanced implementation

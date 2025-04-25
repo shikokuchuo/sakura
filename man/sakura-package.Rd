@@ -31,10 +31,4 @@ Authors:
   \item Travers Ching \email{traversc@gmail.com}
 }
 
-Other contributors:
-\itemize{
-  \item Posit Software, PBC (\href{https://ror.org/03wc8by49}{ROR}) [copyright holder, funder]
-  \item Hibiki AI Limited [copyright holder]
-}
-
 }
