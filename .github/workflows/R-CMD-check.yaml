@@ -52,6 +52,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Install torch
+        run: |
+          Rscript -e 'torch::install_torch()'
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
