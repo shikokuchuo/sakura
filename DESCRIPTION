@@ -1,39 +1,34 @@
-Package: sakura
 Type: Package
+Package: sakura
 Title: Extension to R Serialization
 Version: 0.1.0.9000
-Description: Extends the functionality of R serialization by augmenting the
-    built-in reference hook system. This enhanced implementation allows an
-    integrated single-pass operation that combines R serialization with
-    third-party serialization methods. Facilitates the serialization of even
-    complex R objects, which contain non-system reference objects, such as those
-    accessed via external pointers, to enable their use in parallel and
-    distributed computing.
-Authors@R: 
-    c(person(given = "Charlie",
-             family = "Gao",
-             role = c("aut", "cre"),
-             email = "charlie.gao@shikokuchuo.net",
-             comment = c(ORCID = "0000-0002-0750-061X")),
-      person(given = "Travers",
-             family = "Ching",
-             role = "aut",
-             email = "traversc@gmail.com"),
-      person(given = "Posit Software, PBC",
-             role = c("cph", "fnd")),
-      person(given = "Hibiki AI Limited",
-             role = "cph"))
+Authors@R: c(
+    person("Charlie", "Gao", , "charlie.gao@shikokuchuo.net", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0750-061X")),
+    person("Travers", "Ching", , "traversc@gmail.com", role = "aut"),
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49")),
+    person("Hibiki AI Limited", role = "cph")
+  )
+Description: Extends the functionality of R serialization by augmenting
+    the built-in reference hook system. This enhanced implementation
+    allows an integrated single-pass operation that combines R
+    serialization with third-party serialization methods. Facilitates the
+    serialization of even complex R objects, which contain non-system
+    reference objects, such as those accessed via external pointers, to
+    enable their use in parallel and distributed computing.
 License: MIT + file LICENSE
+URL: https://shikokuchuo.net/sakura/,
+    https://github.com/shikokuchuo/sakura/
 BugReports: https://github.com/shikokuchuo/sakura/issues
-URL: https://shikokuchuo.net/sakura/, https://github.com/shikokuchuo/sakura/
-Encoding: UTF-8
 Depends: 
     R (>= 3.5)
 Suggests:
     arrow,
     testthat (>= 3.0.0),
     torch
-RoxygenNote: 7.3.2
-Roxygen: list(markdown = TRUE)
-Config/testthat/edition: 3
 Config/build/compilation-database: true
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2.9000
