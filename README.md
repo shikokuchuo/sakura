@@ -141,15 +141,15 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.4540
-#>  0.2009
-#>  0.9935
-#>  0.0545
-#>  0.8483
+#>  0.9548
+#>  0.4229
+#>  0.2680
+#>  0.1663
+#>  0.4890
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.2024754 0.2513626 0.5177888 0.8914016 0.6242463
+#> [1] 0.5943560 0.9202181 0.2779042 0.3567331 0.5193037
 ```
 
 ### C Interface

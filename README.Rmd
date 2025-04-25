@@ -4,7 +4,8 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -44,13 +45,17 @@ It extracts the functionality embedded within the [mirai](https://github.com/r-l
 
 Install the current release from CRAN:
 
-```{r cran, eval=FALSE}
+```{r}
+#| label: cran
+#| eval: false
 install.packages("sakura")
 ```
 
 Or the development version using:
 
-```{r devinstall, eval=FALSE}
+```{r}
+#| label: devinstall
+#| eval: false
 pak::pak("shikokuchuo/sakura")
 ```
 
@@ -60,7 +65,9 @@ Some R objects by their nature cannot be serialized, such as those accessed via 
 
 Using the [`arrow`](https://arrow.apache.org/docs/r/) package as an example:
 
-```{r arrowfail,error=TRUE}
+```{r}
+#| label: arrowfail
+#| error: true
 library(arrow, warn.conflicts = FALSE)
 obj <- list(as_arrow_table(iris), as_arrow_table(mtcars))
 
@@ -68,7 +75,8 @@ unserialize(serialize(obj, NULL))
 ```
 In such cases, `sakura::serial_config()` can be used to create custom serialization configurations, specifying functions that hook into R's native serialization mechanism for reference objects ('refhooks').
 
-```{r arrowcfg}
+```{r}
+#| label: arrowcfg
 cfg <- sakura::serial_config(
   "ArrowTabular",
   arrow::write_to_raw,
@@ -76,14 +84,17 @@ cfg <- sakura::serial_config(
 )
 ```
 This configuration can then be supplied as the 'hook' argument for `sakura::serialize()` and `sakura::unserialize()`.
-```{r arrowpass}
+```{r}
+#| label: arrowpass
 sakura::unserialize(sakura::serialize(obj, cfg), cfg)
 ```
 This time, the arrow tables are handled seamlessly.
 
 Using `torch` as another example:
 
-```{r torchfail, error=TRUE}
+```{r}
+#| label: torchfail
+#| error: true
 library(torch)
 x <- list(torch_rand(5L), runif(5L))
 
@@ -91,7 +102,8 @@ unserialize(serialize(x, NULL))
 ```
 Base R serialization above fails, but `sakura` serialization succeeds:
 
-```{r torchpass}
+```{r}
+#| label: torchpass
 cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torch_load)
 
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
