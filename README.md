@@ -9,7 +9,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/sakura)](https://CRAN.R-project.org/package=sakura)
-[![R-CMD-check](https://github.com/shikokuchuo/sakura/workflows/R-CMD-check/badge.svg)](https://github.com/shikokuchuo/sakura/actions)
+[![R-CMD-check](https://github.com/shikokuchuo/sakura/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shikokuchuo/sakura/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/shikokuchuo/sakura/graph/badge.svg)](https://app.codecov.io/gh/shikokuchuo/sakura)
 <!-- badges: end -->
@@ -141,15 +141,15 @@ cfg <- sakura::serial_config("torch_tensor", torch::torch_serialize, torch::torc
 sakura::unserialize(sakura::serialize(x, cfg), cfg)
 #> [[1]]
 #> torch_tensor
-#>  0.9548
-#>  0.4229
-#>  0.2680
-#>  0.1663
-#>  0.4890
+#>  0.3755
+#>  0.0540
+#>  0.3365
+#>  0.3944
+#>  0.5949
 #> [ CPUFloatType{5} ]
 #> 
 #> [[2]]
-#> [1] 0.5943560 0.9202181 0.2779042 0.3567331 0.5193037
+#> [1] 0.4271107 0.5690996 0.8724742 0.8202838 0.3796990
 ```
 
 ### C Interface
